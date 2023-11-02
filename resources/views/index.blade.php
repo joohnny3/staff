@@ -69,6 +69,6 @@
                 <input type="text" name="perPage" class="btn btn-secondary mx-2">
                 <button type="submit" class="btn btn-secondary mx-2">submit</button>
             </form>
-            {{ $data->appends(['perPage' => $perPage])->links('vendor.pagination.bootstrap-4') }}
+            {{ $data->appends(['perPage' => $perPage])->links('components.pagination') }}
         </div>
 @endsection

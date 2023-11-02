@@ -18,7 +18,14 @@ class StaffController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->get('perPage', 30);
+        $test = $request->query();
+        if (isset($test['page'])) {
+            $test['pages'] = $test['page'];
+            $request->query->replace($test);
+        }
+        // dd($test);
+
+        $perPage = $request->replace($test)->get('perPage', 30);
 
         try {
 
