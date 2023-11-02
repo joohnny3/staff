@@ -62,7 +62,7 @@ class StaffController extends Controller
 
             DB::commit();
         } catch (ValidationException $t) {
-            
+
             DB::rollBack();
 
             abort(404);
@@ -95,9 +95,8 @@ class StaffController extends Controller
      */
     public function edit(string $id)
     {
-        try {
-            $data = Staff::findOrFail($id);
-        } catch (Throwable $t) {
+        $data = Staff::find($id);
+        if (!$data) {
             abort(404);
         }
 
