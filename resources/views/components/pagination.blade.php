@@ -27,7 +27,7 @@
 
             @php
                 $start = max($paginator->currentPage() - 5, 1);
-                $end = min(max($paginator->currentPage() + 5, 10), $paginator->lastPage());
+                $end = min($paginator->currentPage() + 5, $paginator->lastPage());
             @endphp
 
     

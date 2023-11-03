@@ -84,7 +84,7 @@ class StaffController extends Controller
     public function show(string $id)
     {
         $data = Staff::with('boards')->find($id);
-        dd($data);
+        // dd($data);
         $boards = Board::whereNotNull('board_id')->where('staff_id', $data->id)->get();
 
         if (!$data) {
