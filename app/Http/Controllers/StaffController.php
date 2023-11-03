@@ -38,7 +38,7 @@ class StaffController extends Controller
             abort(404);
         }
 
-        $data = Staff::orderBy('id', 'DESC')->paginate($perPage);
+        $data = Staff::orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
 
         return view('index', ['data' => $data, 'perPage' => $perPage]);
     }
