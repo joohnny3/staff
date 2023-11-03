@@ -84,16 +84,26 @@ class StaffController extends Controller
     public function show(string $id)
     {
         $data = Staff::with('boards')->find($id);
-        // dd($data);
-        $boards = Board::whereNotNull('board_id')->where('staff_id', $data->id)->get();
 
         if (!$data) {
             abort(404);
         }
 
+        $data->boards->each(function ($board) use ($data) {
+
+            if ($board->board_id) {
+
+                $targetBoard = $data->boards->firstWhere('id', $board->board_id);
+
+                if ($targetBoard) {
+
+                    $targetBoard->reply_content = $board->content;
+                }
+            }
+        });
+
         return view('board', [
             'staff' => $data,
-            'message' => $boards
         ]);
     }
 

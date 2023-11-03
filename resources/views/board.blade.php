@@ -43,16 +43,13 @@
                                 reply
                             </a>
                         </div>
-
-                        <div>
-                            @foreach ($message as $messages)
-                                @if ($messages->board_id == $board->id)
-                                    <div class="text-warning">
-                                        {{ $messages->content }}
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
+                        @if (isset($board->reply_content))
+                            <div>
+                                <div class="text-warning">
+                                    {{ $board->reply_content }}
+                                </div>
+                            </div>
+                        @endif
 
                         <div>
                             <div class="collapse my-2" id="collapseExample{{ $loop->iteration }}">
