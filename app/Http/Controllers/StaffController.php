@@ -11,6 +11,8 @@ use Throwable;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 
+use function Laravel\Prompts\search;
+
 class StaffController extends Controller
 {
     /**
@@ -18,29 +20,43 @@ class StaffController extends Controller
      */
     public function index(Request $request)
     {
-        $test = $request->query();
-        if (isset($test['page'])) {
-            $test['pages'] = $test['page'];
-            $request->query->replace($test);
-        }
-        // dd($test);
+        $search = Staff::query();
 
-        $perPage = $request->replace($test)->get('perPage', 30);
+        $name = $request->input('name');
+
+        $phone = $request->input('phone');
+
+        $address = $request->input('address');
+
+        if ($name) {
+            $search = $search->where('name', 'LIKE', "%{$name}%");
+        }
+
+        if ($phone) {
+            $search = $search->where('phone', 'LIKE', "%{$phone}%");
+        }
+
+        if ($address) {
+            $search = $search->where('address', 'LIKE', "%{$address}%");
+        }
+
+
+        $perPage = $request->get('perPage', 30);
 
         try {
-
-            $validatedData = $request->validate([
-                'perPage' => 'integer|min:1|max:100',
+            $request->validate([
+                'perPage' => 'integer',
             ]);
-
-            $perPage = $validatedData['perPage'] ?? $perPage;
         } catch (ValidationException $t) {
             abort(404);
         }
 
-        $data = Staff::orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
+        if ($perPage) {
+            $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
+        }
 
-        return view('index', ['data' => $data, 'perPage' => $perPage]);
+
+        return view('index', ['data' => $data, 'perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address]);
     }
 
     /**

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
- 
     {{-- staff data --}}
     <div class="row mt-3 mx-2 d-flex justify-content-center">
         @foreach ($data as $staff)
@@ -62,13 +61,17 @@
             <!-- Modal -->
         @endforeach
     </div>
+    <div class="mt-5 justify-content-end d-flex mx-3">
+        <form action="{{ route('staff.index') }}" class="mx-2" method="GET">
+            <label for="">輸入每頁顯示幾筆資料</label>
 
-        <div class="mt-5 justify-content-end d-flex mx-3">
-            <form action="{{ route('staff.index') }}" class="mx-2" method="GET">
-                <label for="">輸入每頁顯示幾筆資料</label>
-                <input type="text" name="perPage" class="btn btn-secondary mx-2">
-                <button type="submit" class="btn btn-secondary mx-2">submit</button>
-            </form>
-            {{ $data->appends(['perPage' => $perPage])->links('components.pagination') }}
-        </div>
+            <input type="hidden" name="name" value="{{ $name }}">
+            <input type="hidden" name="phone" value="{{ $phone }}">
+            <input type="hidden" name="address" value="{{ $address }}">
+
+            <input type="text" name="perPage" class="btn btn-secondary mx-2">
+            <button type="submit" class="btn btn-secondary mx-2">submit</button>
+        </form>
+        {{ $data->appends(['perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address])->links('components.pagination') }}
+    </div>
 @endsection

@@ -1,5 +1,7 @@
 <?php
+
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +37,5 @@ Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show
 
 Route::post('/staff/{staff}/boards', [BoardController::class, 'store'])->name('board.store');
 
+
+// Route::get('/staff/search', [SearchController::class, 'index'])->name('staff.search');
