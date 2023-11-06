@@ -51,9 +51,7 @@ class StaffController extends Controller
             abort(404);
         }
 
-        if ($perPage) {
-            $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
-        }
+        $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
 
 
         return view('index', ['data' => $data, 'perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address]);
