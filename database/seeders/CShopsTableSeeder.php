@@ -13,7 +13,7 @@ class CShopsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = collect(range(1, 10000))->map(function ($index) {
+        $data = collect()->range(1, 10000)->map(function ($index) {
             return [
                 'money' => fake()->randomNumber(4, true),
             ];
