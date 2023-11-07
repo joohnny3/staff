@@ -30,7 +30,7 @@
                 $end = min($paginator->currentPage() + 5, $paginator->lastPage());
             @endphp
 
-    
+
             @if ($start > 1)
                 <li class="page-item disabled" aria-disabled="true"><span class="page-link">...</span></li>
             @endif
@@ -51,7 +51,7 @@
             @endif
 
 
-         
+
 
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())

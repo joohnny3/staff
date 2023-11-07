@@ -19,7 +19,7 @@
                 <tbody>
                     <tr>
                         <td>
-                                <input class="btn btn-light" type="text" name="name" value="{{ $data->name }}">
+                            <input class="btn btn-light" type="text" name="name" value="{{ $data->name }}">
                         </td>
                         <td>
                             <input class="btn btn-light" type="text" name="phone" value="{{ $data->phone }}">

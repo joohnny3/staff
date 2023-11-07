@@ -6,8 +6,7 @@
         <h2>Add Staff</h2>
         <br>
         <table class="table">
-            <form action="{{route('staff.store')}}"
-                method="post">
+            <form action="{{ route('staff.store') }}" method="post">
                 @csrf
                 <thead>
                     <tr>

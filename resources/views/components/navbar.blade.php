@@ -30,7 +30,7 @@
                      value="{{ request('address') }}">
                  <input class="btn btn-light mx-2" type="text" name="message" placeholder="留言"
                      value="{{ request('message') }}">
-                     
+
                  <button type="submit" class="btn btn-success mx-2">搜尋</button>
              </form>
          </div>
