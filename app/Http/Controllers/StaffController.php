@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 use App\Models\Staff;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 use function Laravel\Prompts\search;
@@ -28,6 +29,8 @@ class StaffController extends Controller
 
         $address = $request->input('address');
 
+        $message = $request->input('message');
+
         if ($name) {
             $search = $search->where('name', 'LIKE', "%{$name}%");
         }
@@ -40,6 +43,11 @@ class StaffController extends Controller
             $search = $search->where('address', 'LIKE', "%{$address}%");
         }
 
+        if ($message) {
+            $search = $search->whereHas('boards', function (Builder $query) use ($message) {
+                $query->where('content', 'LIKE', "%{$message}%");
+            });
+        }
 
         $perPage = $request->get('perPage', 30);
 
@@ -54,7 +62,7 @@ class StaffController extends Controller
         $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
 
 
-        return view('index', ['data' => $data, 'perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address]);
+        return view('index', ['data' => $data, 'perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address, 'message' => $message]);
     }
 
     /**

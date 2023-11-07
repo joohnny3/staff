@@ -68,10 +68,11 @@
             <input type="hidden" name="name" value="{{ $name }}">
             <input type="hidden" name="phone" value="{{ $phone }}">
             <input type="hidden" name="address" value="{{ $address }}">
+            <input type="hidden" name="message" value="{{ $message }}">
 
             <input type="text" name="perPage" class="btn btn-secondary mx-2">
             <button type="submit" class="btn btn-secondary mx-2">submit</button>
         </form>
-        {{ $data->appends(['perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address])->links('components.pagination') }}
+        {{ $data->appends(['perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address, 'message' => $message])->links('components.pagination') }}
     </div>
 @endsection
