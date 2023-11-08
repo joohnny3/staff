@@ -111,18 +111,24 @@ class StaffController extends Controller
             abort(404);
         }
 
-        $data->boards->each(function ($board) use ($data) {
+        $reply = $data->boards->reduce(
+            function ($carry, $board) {
 
-            if ($board->board_id) {
-
-                $targetBoard = $data->boards->firstWhere('id', $board->board_id);
-
-                if ($targetBoard) {
-
-                    $targetBoard->reply_content = $board->content;
+                if ($board->board_id) {
+                    $carry[$board->board_id][] = $board->content;
                 }
+                return $carry;
+            },
+            []
+        );
+
+        $data->boards->each(function ($board) use ($reply) {
+            if (array_key_exists($board->id, $reply)) {
+                $board->reply_contents = $reply[$board->id];
             }
         });
+
+        // dd($data, $reply);
 
         return view('board', [
             'staff' => $data,

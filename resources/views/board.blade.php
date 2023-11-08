@@ -43,12 +43,15 @@
                                 reply
                             </a>
                         </div>
-                        @if (isset($board->reply_content))
-                            <div>
-                                <div class="text-warning">
-                                    {{ $board->reply_content }}
+
+                        @if (isset($board->reply_contents))
+                            @foreach ($board->reply_contents as $replyContent)
+                                <div>
+                                    <div class="text-warning">
+                                        {{ $replyContent }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         @endif
 
                         <div>
