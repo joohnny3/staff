@@ -17,6 +17,14 @@ class StaffController extends Controller
      */
     public function index(Request $request)
     {
+        try {
+            $request->validate([
+                'perPage' => 'integer',
+            ]);
+        } catch (ValidationException $t) {
+            abort(404);
+        }
+
         $search = Staff::query();
 
         $name = $request->input('name');
@@ -46,14 +54,6 @@ class StaffController extends Controller
         }
 
         $perPage = $request->get('perPage', 30);
-
-        try {
-            $request->validate([
-                'perPage' => 'integer',
-            ]);
-        } catch (ValidationException $t) {
-            abort(404);
-        }
 
         $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
 

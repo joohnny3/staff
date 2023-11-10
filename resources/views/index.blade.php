@@ -70,8 +70,7 @@
             <input type="hidden" name="address" value="{{ $address }}">
             <input type="hidden" name="message" value="{{ $message }}">
 
-            <input type="text" name="perPage" class="btn btn-secondary mx-2 bg-light"
-                placeholder="{{ $perPage }}">
+            <input type="text" name="perPage" class="btn btn-secondary mx-2 bg-light" placeholder="{{ $perPage }}">
             <button type="submit" class="btn btn-secondary mx-2">submit</button>
         </form>
         {{ $data->appends(['perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address, 'message' => $message])->links('components.pagination') }}
