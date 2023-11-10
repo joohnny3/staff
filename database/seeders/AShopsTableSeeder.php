@@ -18,7 +18,7 @@ class AShopsTableSeeder extends Seeder
                 'money' => fake()->randomNumber(4, true),
             ];
         })->all();
-        // dd($data);
+
         AShop::insert($data);
     }
 }

@@ -22,13 +22,10 @@ class AvgAShopsTableSeeder extends Seeder
         $bShopsData->each(function ($money, $id) use ($cShopsData) {
             if (isset($cShopsData[$id])) {
                 $avgMoney = ($money + $cShopsData[$id]) / 2;
-        
+
                 AShop::where('id', $id)->update(['avg' => $avgMoney]);
             }
         });
-        
-        // dd($avgData->keys()->first());
-        // dd($avgData->keys()->max());
 
     }
 }

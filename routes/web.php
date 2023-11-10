@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-// Route::resource('/staff', StaffController::class);
 
 
 Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
@@ -38,4 +37,3 @@ Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show
 Route::post('/staff/{staff}/boards', [BoardController::class, 'store'])->name('board.store');
 
 
-// Route::get('/staff/search', [SearchController::class, 'index'])->name('staff.search');

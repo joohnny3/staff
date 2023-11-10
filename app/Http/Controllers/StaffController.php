@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Board;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Staff;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use App\Models\Staff;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-
-use function Laravel\Prompts\search;
 
 class StaffController extends Controller
 {
@@ -127,8 +123,6 @@ class StaffController extends Controller
                 $board->reply_contents = $reply[$board->id];
             }
         });
-
-        // dd($data, $reply);
 
         return view('board', [
             'staff' => $data,

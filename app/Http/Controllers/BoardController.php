@@ -12,8 +12,6 @@ class BoardController extends Controller
 {
     public function store(Request $request, Staff $staff)
     {
-        // dd($request);
-
         if (isset($request->board_id)) {
             try {
                 DB::beginTransaction();
