@@ -16,10 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         Staff::factory('2000')->create();
         Staff::get()->each(function ($staff) {
-            Board::factory('1')->create([  
+            Board::factory('1')->create([
                 'staff_id' => $staff->id,
             ]);
         });
-
     }
 }
