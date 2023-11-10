@@ -35,19 +35,19 @@ class StaffController extends Controller
 
         $message = $request->input('message');
 
-        if ($name) {
+        if ($name !== null && $name !== '') {
             $search = $search->where('name', 'LIKE', "%{$name}%");
         }
 
-        if ($phone) {
+        if ($phone !== null && $phone !== '') {
             $search = $search->where('phone', 'LIKE', "%{$phone}%");
         }
 
-        if ($address) {
+        if ($address !== null && $address !== '') {
             $search = $search->where('address', 'LIKE', "%{$address}%");
         }
 
-        if ($message) {
+        if ($message !== null && $message !== '') {
             $search = $search->whereHas('boards', function (Builder $query) use ($message) {
                 $query->where('content', 'LIKE', "%{$message}%");
             });
