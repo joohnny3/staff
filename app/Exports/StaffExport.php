@@ -21,9 +21,9 @@ class StaffExport implements FromQuery
     /**
      * @return \Illuminate\Support\Collection
      */
-    
+
     public function query()
     {
-        return Staff::query()->whereIn('id', $this->id);
+        return Staff::query()->whereIn('id', $this->id)->select('id', 'name', 'phone','address');
     }
 }
