@@ -2,65 +2,58 @@
 
 @section('content')
     {{-- staff data --}}
-    <div class="row mt-3 mx-2 d-flex justify-content-center">
-        @foreach ($data as $staff)
-            <div class="col-sm-2 mx-2">
-                <div class="card card-primary">
-                    <div class="card-header d-flex">
-                        <div class="d-flex align-items-center">
-                            <a href="{{ route('staff.show', ['staff' => $staff]) }}">
-                                <h3 class="card-title">{{ $staff->name }}</h3>
-                            </a>
-                            <div class="d-flex">
-                                <a href="{{ route('staff.edit', ['staff' => $staff]) }}"
-                                    class="btn btn-sm btn-warning mx-2">Edit</a>
-                                <button type="button" class="btn-danger btn-sm btn mx-2" data-toggle="modal"
-                                    data-target="#exampleModal-{{ $staff->id }}">
-                                    Dele
-                                </button>
+
+    <form action="{{ route('staff.export') }}" method="POST">
+        @csrf
+
+        <div class="row mt-3 mx-2 d-flex justify-content-center">
+
+            @foreach ($data as $staff)
+                <div class="col-sm-2 mx-2">
+                    <div class="card card-primary">
+                        <div class="card-header d-flex">
+                            <div class="d-flex align-items-center">
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="staff_id[]" value="{{ $staff->id }}"
+                                        class="form-check-input mr-2">
+                                </div>
+
+                                <a href="{{ route('staff.show', ['staff' => $staff]) }}">
+                                    <h3 class="card-title">{{ $staff->name }}</h3>
+                                </a>
+                                <div class="d-flex">
+                                    <a href="{{ route('staff.edit', ['staff' => $staff]) }}"
+                                        class="btn btn-sm btn-warning mx-2">Edit</a>
+
+                                    <button type="button" class="btn-danger btn-sm btn mx-2"
+                                        onclick="deleteStaff({{ $staff->id }})">Dele</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="card-body">
-                        {{ $staff->phone }}
-                    </div>
-                    <div class="card-footer">
-                        {{ $staff->address }}
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Button trigger modal -->
-            <form action="{{ route('staff.destroy', $staff->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                {{-- <button type="submit" class="btn-danger btn-sm btn mx-2">Dele</button> --}}
-                <div class="modal fade" id="exampleModal-{{ $staff->id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                確定刪除嗎？
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
+                        <div class="card-body">
+                            {{ $staff->phone }}
+                        </div>
+                        <div class="card-footer">
+                            {{ $staff->address }}
                         </div>
                     </div>
                 </div>
-            </form>
-            <!-- Modal -->
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+
+        <button type="button" class="btn btn-primary mx-2 mt-4" onclick="selectAll()">Select All</button>
+        <button type="button" class="btn btn-secondary mx-2 mt-4" onclick="deselectAll()">Cancel All</button>
+
+        <button type="submit" class="btn btn-success mx-2 mt-4">Download Excel</button>
+    </form>
+
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
     <div class="mt-5 justify-content-end d-flex mx-3">
         <form action="{{ route('staff.index') }}" class="mx-2" method="GET">
             <label for="">輸入每頁顯示幾筆資料</label>
@@ -71,8 +64,30 @@
             <input type="hidden" name="message" value="{{ $message }}">
 
             <input type="text" name="perPage" class="btn btn-secondary mx-2 bg-light" placeholder="{{ $perPage }}">
-            <button type="submit" class="btn btn-secondary mx-2">submit</button>
+            <button type="submit" class="btn btn-primary mx-2">submit</button>
         </form>
         {{ $data->appends(['perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address, 'message' => $message])->links('components.pagination') }}
     </div>
 @endsection
+
+<script>
+    function selectAll() {
+        document.querySelectorAll('input[name="staff_id[]"]').forEach(function(checkbox) {
+            checkbox.checked = true;
+        });
+    }
+
+    function deselectAll() {
+        document.querySelectorAll('input[name="staff_id[]"]').forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+    }
+
+    function deleteStaff(staffId) {
+        if (confirm('確定刪除嗎？')) {
+            var form = document.getElementById('deleteForm');
+            form.action = '/staff/' + staffId;
+            form.submit();
+        }
+    }
+</script>

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StaffExport;
 use App\Models\Staff;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class StaffController extends Controller
@@ -197,5 +199,12 @@ class StaffController extends Controller
             abort(404);
         }
         return redirect()->route('staff.index');
+    }
+
+    public function export(Request $request)
+    {
+        $staffIds = $request->input('staff_id');       
+
+        return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
     }
 }
