@@ -16,9 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
-
 Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
 
 Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
@@ -32,7 +29,6 @@ Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff
 Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
 
 Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show');
-
 
 Route::post('/staff_export',[StaffController::class,'export'])->name('staff.export');
 

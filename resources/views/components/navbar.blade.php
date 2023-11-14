@@ -16,7 +16,7 @@
      <ul class="navbar-nav ml-auto">
 
          <div class="d-flex align-self-center mx-2">
-             <form action="{{ route('staff.index') }}" method="GET">
+             <form action="{{ route('staff.index') }}" method="GET" style="display: contents">
 
                  @if (isset($perPage))
                      <input type="hidden" name="perPage" value="{{ $perPage }}">
