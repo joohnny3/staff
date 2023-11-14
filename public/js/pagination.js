@@ -28,8 +28,6 @@ async function saveCheckboxState(url) {
 
         if (response.ok) {
             window.location.href = url;
-        } else {
-            console.error("HTTP Error:", response.statusText);
         }
     } catch (error) {
         console.error("Fetch Error:", error);

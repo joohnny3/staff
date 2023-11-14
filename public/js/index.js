@@ -24,19 +24,48 @@ function deleteStaff(staffId) {
     }
 }
 
-function excelDownload() {
+// function excelDownload() {
+//     const checkBoxs = document.querySelectorAll(
+//         'input[name="staff_id[]"]:checked'
+//     );
+//     const excelForm = document.querySelector("#excelDownloadForm");
+
+//     checkBoxs.forEach(function (checkbox) {
+//         const checkboxInput = document.createElement("input");
+//         checkboxInput.name = "staff_id[]";
+//         checkboxInput.value = checkbox.value;
+//         excelForm.appendChild(checkboxInput);
+//     });
+
+//     excelForm.action = "/staff_export";
+//     excelForm.submit();
+// }
+
+async function excelDownload() {
     const checkBoxs = document.querySelectorAll(
         'input[name="staff_id[]"]:checked'
     );
-    const excelForm = document.querySelector("#excelDownloadForm");
+    const formData = new FormData();
 
     checkBoxs.forEach(function (checkbox) {
-        const checkboxInput = document.createElement("input");
-        checkboxInput.name = "staff_id[]";
-        checkboxInput.value = checkbox.value;
-        excelForm.appendChild(checkboxInput);
+        formData.append("staff_id[]", checkbox.value);
     });
 
-    excelForm.action = "/staff_export";
-    excelForm.submit();
+    try {
+        const response = await fetch("/staff_export", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        });
+
+        if (response.ok) {
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+    }
 }
