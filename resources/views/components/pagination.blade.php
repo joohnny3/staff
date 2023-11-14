@@ -7,7 +7,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->url(1) }}" rel="prev"
+                    <a class="page-link paginationCheckbox" href="{{ $paginator->url(1) }}" rel="prev"
                         aria-label="@lang('pagination.previous')">回第一頁</a>
                 </li>
             @endif
@@ -18,7 +18,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev"
+                    <a class="page-link paginationCheckbox" href="{{ $paginator->previousPageUrl() }}" rel="prev"
                         aria-label="@lang('pagination.previous')">往前一頁</a>
                 </li>
             @endif
@@ -40,7 +40,8 @@
                     <li class="page-item active" aria-current="page"><span class="page-link">{{ $i }}</span>
                     </li>
                 @else
-                    <li class="page-item"><a class="page-link" href="{{ $paginator->url($i) }}">{{ $i }}</a>
+                    <li class="page-item"><a class="page-link paginationCheckbox"
+                            href="{{ $paginator->url($i) }}">{{ $i }}</a>
                     </li>
                 @endif
             @endfor
@@ -56,7 +57,7 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next"
+                    <a class="page-link paginationCheckbox" href="{{ $paginator->nextPageUrl() }}" rel="next"
                         aria-label="@lang('pagination.next')">往後一頁</a>
                 </li>
             @else
@@ -66,7 +67,7 @@
             @endif
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->url($paginator->lastPage()) }}" rel="next"
+                    <a class="page-link paginationCheckbox" href="{{ $paginator->url($paginator->lastPage()) }}" rel="next"
                         aria-label="@lang('pagination.next')">最後一頁</a>
                 </li>
             @else

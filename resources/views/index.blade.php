@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- staff data --}}
     <div class="row mt-3 mx-2 d-flex justify-content-center">
         @foreach ($data as $staff)
             <div class="col-sm-2 mx-2">
@@ -10,8 +9,13 @@
                         <div class="d-flex align-items-center">
 
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="staff_id[]" value="{{ $staff->id }}"
-                                    class="form-check-input mr-2">
+                                @if (in_array($staff->id, session('staff_checkbox_ids',[])))
+                                    <input type="checkbox" name="staff_id[]" value="{{ $staff->id }}"
+                                        class="form-check-input mr-2" checked>
+                                @else
+                                    <input type="checkbox" name="staff_id[]" value="{{ $staff->id }}"
+                                        class="form-check-input mr-2">
+                                @endif
                             </div>
 
                             <a href="{{ route('staff.show', ['staff' => $staff]) }}">
@@ -65,39 +69,7 @@
     </div>
 @endsection
 
-<script>
-    function selectAll() {
-        document.querySelectorAll('input[name="staff_id[]"]').forEach(function(checkbox) {
-            checkbox.checked = true;
-        });
-    }
-
-    function deselectAll() {
-        document.querySelectorAll('input[name="staff_id[]"]').forEach(function(checkbox) {
-            checkbox.checked = false;
-        });
-    }
-
-    function deleteStaff(staffId) {
-        if (confirm('確定刪除嗎？')) {
-            const deleteForm = document.querySelector('#deleteForm');
-            deleteForm.action = '/staff/' + staffId;
-            deleteForm.submit();
-        }
-    }
-
-    function excelDownload() {
-        const checkBoxs = document.querySelectorAll('input[name="staff_id[]"]:checked');
-        const excelForm = document.querySelector('#excelDownloadForm');
-
-        checkBoxs.forEach(function(checkbox) {
-            const checkboxInput = document.createElement('input');
-            checkboxInput.name = 'staff_id[]';
-            checkboxInput.value = checkbox.value;
-            excelForm.appendChild(checkboxInput);
-        });
-
-        excelForm.action = '/staff_export';
-        excelForm.submit();
-    }
-</script>
+@section('script')
+    <script src="{{ asset('js/index.js') }}"></script>
+    <script src="{{ asset('js/pagination.js') }}"></script>
+@endsection

@@ -32,6 +32,8 @@ Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show
 
 Route::post('/staff_export',[StaffController::class,'export'])->name('staff.export');
 
+Route::post('/staff_checkbox', [StaffController::class,'checkBox'])->name('staff.checkbox');
+
 Route::post('/staff/{staff}/boards', [BoardController::class, 'store'])->name('board.store');
 
 

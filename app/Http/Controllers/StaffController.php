@@ -203,8 +203,27 @@ class StaffController extends Controller
 
     public function export(Request $request)
     {
-        $staffIds = $request->input('staff_id');       
+        $sessionIds = session('staff_checkbox_ids', []);
+
+        $inputIds = $request->input('staff_id', []);
+        
+        $staffIds = array_unique(array_merge($inputIds, $sessionIds));
+        
+        session()->forget('staff_checkbox_ids');
 
         return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
+    }
+
+    public function checkBox(Request $request)
+    {
+        $nowIds = session('staff_checkbox_ids', []);
+
+        $newIds = $request->selectedIds;
+
+        $allIds = array_unique(array_merge($nowIds, $newIds));
+
+        session(['staff_checkbox_ids' => $allIds]);
+
+        return response(null, 200);
     }
 }
