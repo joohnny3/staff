@@ -51,6 +51,12 @@ async function excelDownload() {
         formData.append("staff_id[]", checkbox.value);
     });
 
+    // for (let [key, value] of formData.entries()) {
+    //     console.log(key, value);
+    // }
+    // 檢查form表單的值
+
+
     try {
         const response = await fetch("/staff_export", {
             method: "POST",
@@ -63,7 +69,7 @@ async function excelDownload() {
         });
 
         if (response.ok) {
-            window.location.reload();
+            // window.location.reload();
         }
     } catch (error) {
         console.error("Fetch Error:", error);
