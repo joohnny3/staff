@@ -22,6 +22,8 @@
                      <input type="hidden" name="perPage" value="{{ $perPage }}">
                  @endif
 
+                 <input type="hidden" name="searchFlag" value="1">
+
                  <input class="btn btn-light mx-2" type="text" name="name" placeholder="姓名"
                      value="{{ request('name') }}">
                  <input class="btn btn-light mx-2" type="text" name="phone" placeholder="電話"

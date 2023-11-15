@@ -37,6 +37,10 @@ class StaffController extends Controller
 
         $message = $request->input('message');
 
+        if ($request->input('searchFlag')) {
+            session()->forget('staff_checkbox_ids');
+        }
+
         if ($name !== null && $name !== '') {
             $search = $search->where('name', 'LIKE', "%{$name}%");
         }
@@ -206,9 +210,9 @@ class StaffController extends Controller
         $sessionIds = session('staff_checkbox_ids', []);
 
         $inputIds = $request->input('staff_id', []);
-        
+
         $staffIds = array_unique(array_merge($inputIds, $sessionIds));
-        
+
         session()->forget('staff_checkbox_ids');
 
         return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
