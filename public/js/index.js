@@ -24,23 +24,6 @@ function deleteStaff(staffId) {
     }
 }
 
-// function excelDownload() {
-//     const checkBoxs = document.querySelectorAll(
-//         'input[name="staff_id[]"]:checked'
-//     );
-//     const excelForm = document.querySelector("#excelDownloadForm");
-
-//     checkBoxs.forEach(function (checkbox) {
-//         const checkboxInput = document.createElement("input");
-//         checkboxInput.name = "staff_id[]";
-//         checkboxInput.value = checkbox.value;
-//         excelForm.appendChild(checkboxInput);
-//     });
-
-//     excelForm.action = "/staff_export";
-//     excelForm.submit();
-// }
-
 async function excelDownload() {
     const checkBoxs = document.querySelectorAll(
         'input[name="staff_id[]"]:checked'
@@ -50,11 +33,6 @@ async function excelDownload() {
     checkBoxs.forEach(function (checkbox) {
         formData.append("staff_id[]", checkbox.value);
     });
-
-    // for (let [key, value] of formData.entries()) {
-    //     console.log(key, value);
-    // }
-    // 檢查form表單的值
 
     try {
         const response = await fetch("/staff_export", {
