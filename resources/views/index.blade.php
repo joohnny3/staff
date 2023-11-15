@@ -59,7 +59,7 @@
 
     <div class="mt-5 justify-content-end d-flex mx-3">
         <form action="{{ route('staff.index') }}" class="mx-2" method="GET">
-            <label for="">輸入每頁顯示幾筆資料</label>
+            <label for="">每頁顯示資料筆數</label>
 
             <input type="hidden" name="name" value="{{ $name }}">
             <input type="hidden" name="phone" value="{{ $phone }}">
