@@ -48,9 +48,9 @@
     <button type="button" class="btn btn-primary mx-2 mt-4" onclick="selectAll()">Select All</button>
     <button type="button" class="btn btn-secondary mx-2 mt-4" onclick="deselectAll()">Cancel All</button>
 
-    <form id="excelDownloadForm" method="POST">
+    {{-- <form id="excelDownloadForm" method="POST">
         @csrf
-    </form>
+    </form> --}}
 
     <form id="deleteForm" method="POST">
         @csrf
