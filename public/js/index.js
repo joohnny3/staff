@@ -56,7 +56,6 @@ async function excelDownload() {
     // }
     // 檢查form表單的值
 
-
     try {
         const response = await fetch("/staff_export", {
             method: "POST",
@@ -69,7 +68,16 @@ async function excelDownload() {
         });
 
         if (response.ok) {
-            // window.location.reload();
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "staff.xlsx";
+            document.body.appendChild(a); 
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+            window.location.reload(); 
         }
     } catch (error) {
         console.error("Fetch Error:", error);
@@ -111,4 +119,3 @@ async function saveCheckboxState(url) {
         console.error("Fetch Error:", error);
     }
 }
-
