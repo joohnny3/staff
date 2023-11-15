@@ -68,7 +68,7 @@ async function excelDownload() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    let paginationCheckbox = document.querySelectorAll(".paginationCheckbox");
+    const paginationCheckbox = document.querySelectorAll(".paginationCheckbox");
     paginationCheckbox.forEach((link) => {
         link.addEventListener("click", function (event) {
             event.preventDefault(); //預防重載
@@ -79,12 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function saveCheckboxState(url) {
-    let selectedIds = Array.from(
+    const selectedIds = Array.from(
         document.querySelectorAll('input[name="staff_id[]"]:checked')
     ).map((checkbox) => checkbox.value);
 
     try {
-        let response = await fetch("/staff_checkbox", {
+        const response = await fetch("/staff_checkbox", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
