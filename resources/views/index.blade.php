@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <form action="{{ route('staff.export') }}" method="POST">
+        @csrf
+
     <div class="row mt-3 mx-2 d-flex justify-content-center">
         @foreach ($data as $staff)
             <div class="col-sm-2 mx-2">
@@ -9,7 +12,7 @@
                         <div class="d-flex align-items-center">
 
                             <div class="custom-control custom-checkbox">
-                                @if (in_array($staff->id, session('staff_checkbox_ids',[])))
+                                @if (in_array($staff->id, session('staff_checkbox_ids', [])))
                                     <input type="checkbox" name="staff_id[]" value="{{ $staff->id }}"
                                         class="form-check-input mr-2" checked>
                                 @else
@@ -39,14 +42,15 @@
             </div>
         @endforeach
     </div>
-
+    
+    <button type="submit" class="btn btn-success mx-2 mt-4" onclick="excelDownload()">Download Excel</button>
+</form>
     <button type="button" class="btn btn-primary mx-2 mt-4" onclick="selectAll()">Select All</button>
     <button type="button" class="btn btn-secondary mx-2 mt-4" onclick="deselectAll()">Cancel All</button>
-    <button type="button" class="btn btn-success mx-2 mt-4" onclick="excelDownload()">Download Excel</button>
 
-    <form id="excelDownloadForm" method="POST" style="display: none">
+    {{-- <form id="excelDownloadForm" method="POST" style="display: none">
         @csrf
-    </form>
+    </form> --}}
 
     <form id="deleteForm" method="POST" style="display: none;">
         @csrf
