@@ -228,6 +228,6 @@ class StaffController extends Controller
 
         session(['staff_checkbox_ids' => $allIds]);
 
-        return response(null, 200);
+        return response(null);
     }
 }
