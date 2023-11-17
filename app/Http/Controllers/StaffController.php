@@ -233,7 +233,7 @@ class StaffController extends Controller
 
             session(['staff_checkbox_ids' => $allIds]);
 
-            return response(null);
+            return response(null, 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()], 500);
         }
