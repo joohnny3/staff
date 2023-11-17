@@ -197,13 +197,13 @@ class StaffController extends Controller
 
             DB::commit();
         } catch (Throwable $t) {
-
             DB::rollBack();
 
             abort(404);
         }
         return redirect()->route('staff.index');
     }
+
 
     public function export(Request $request)
     {
