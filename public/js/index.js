@@ -66,6 +66,7 @@ function excelDownload() {
 
     excelDownloadForm.action = "/staff_export/";
     excelDownloadForm.submit();
+    window.location.reload();
 }
 
 // async function excelDownload() {
