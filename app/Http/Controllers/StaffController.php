@@ -207,27 +207,35 @@ class StaffController extends Controller
 
     public function export(Request $request)
     {
-        $sessionIds = session('staff_checkbox_ids', []);
+        try {
+            $sessionIds = session('staff_checkbox_ids', []);
 
-        $inputIds = $request->input('staff_id', []);
+            $inputIds = $request->input('staff_id', []);
 
-        $staffIds = array_unique(array_merge($inputIds, $sessionIds));
+            $staffIds = array_unique(array_merge($inputIds, $sessionIds));
 
-        session()->forget('staff_checkbox_ids');
+            session()->forget('staff_checkbox_ids');
 
-        return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
+            return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
+        } catch (\Throwable $th) {
+            abort(404);
+        }
     }
 
     public function checkBox(Request $request)
     {
-        $nowIds = session('staff_checkbox_ids', []);
+        try {
+            $nowIds = session('staff_checkbox_ids', []);
 
-        $newIds = $request->selectedIds;
+            $newIds = $request->selectedIds;
 
-        $allIds = array_unique(array_merge($nowIds, $newIds));
+            $allIds = array_unique(array_merge($nowIds, $newIds));
 
-        session(['staff_checkbox_ids' => $allIds]);
+            session(['staff_checkbox_ids' => $allIds]);
 
-        return response(null);
+            return response(null);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 }
