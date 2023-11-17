@@ -3,27 +3,30 @@
 namespace App\Exports;
 
 use App\Models\Staff;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\FromQuery;
+// use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class StaffExport implements FromQuery
+class StaffExport implements FromView, ShouldAutoSize
 {
+    protected $staff;
 
-    private $id;
-
-    function __construct($id)
+    public function __construct($staffIds)
     {
-        $this->id = $id;
+        $this->staff = Staff::whereIn('id', $staffIds)
+            ->get()
+            ->map(function ($staff) {
+                $staff->phone = substr($staff->phone,0,5).'###'.substr($staff->phone,-4);
+
+                return $staff;
+            });
     }
 
-    use Exportable;
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-
-    public function query()
+    public function view(): View
     {
-        return Staff::query()->whereIn('id', $this->id)->select('id', 'name', 'phone','address');
+        return view('exports.staff', [
+            'data' => $this->staff
+        ]);
     }
 }
