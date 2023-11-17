@@ -5,14 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function selectAll() {
-    const checkboxesArray = Array.from(excelCheckbox);
-    const isAllChecked = checkboxesArray.every(checkbox => checkbox.checked);
+    const checkboxesArray = [...excelCheckbox];
+    const isAllChecked = checkboxesArray.every((checkbox) => checkbox.checked);
 
     checkboxesArray.forEach(function (checkbox) {
         checkbox.checked = !isAllChecked;
     });
 }
-
 
 function deselectAll() {
     excelCheckbox.forEach(function (checkbox) {
@@ -56,7 +55,6 @@ function excelDownload() {
         'input[name="staff_id[]"]:checked'
     );
     const excelDownloadForm = document.getElementById("excelDownloadForm");
-
 
     checkBoxs.forEach(function (checkbox) {
         const input = document.createElement("input");
@@ -125,9 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function saveCheckboxState(url) {
-    const selectedIds = Array.from(
-        document.querySelectorAll('input[name="staff_id[]"]:checked')
-    ).map((checkbox) => checkbox.value);
+    const selectedIds = [
+        ...document.querySelectorAll('input[name="staff_id[]"]:checked'),
+    ].map((checkbox) => checkbox.value);
 
     try {
         const response = await fetch("/staff_checkbox", {
