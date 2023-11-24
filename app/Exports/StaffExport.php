@@ -3,36 +3,27 @@
 namespace App\Exports;
 
 use App\Models\Staff;
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class StaffExport implements FromView, ShouldAutoSize
+class StaffExport implements WithMultipleSheets
 {
     protected $staff;
 
-    public function __construct($staffIds)
+    public function __construct($staff)
     {
-        $this->staff = Staff::whereIn('id', $staffIds)
-            ->get()
-            ->map(function ($staff) {
-
-                $replace = ['(', ')', '+', '-'];
-
-                $staff->phone = str_replace($replace, '', $staff->phone);
-
-                // $staff->phone = preg_replace('/[\+\(\)\-]/', '', $staff->phone);
-
-                $staff->phone = substr($staff->phone, 0, 3) . '###' . substr($staff->phone, -4);
-
-                return $staff;
-            });
+        $this->staff = $staff;
     }
 
-    public function view(): View
+    public function sheets(): array
     {
-        return view('exports.staff', [
-            'data' => $this->staff
-        ]);
+        $sheets = [];
+
+        $staffCollection = Staff::whereIn('id', $this->staff)->get();
+
+        $sheets = $staffCollection->chunk(10)->map(function ($chunk) {
+            return new StaffSheet($chunk);
+        })->all();
+
+        return $sheets;
     }
 }
