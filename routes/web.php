@@ -16,24 +16,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+// Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
 
-Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+// Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
 
-Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
+// Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
 
-Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
+// Route::put('/staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
 
-Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+// Route::get('/staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
 
-Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
+// Route::delete('/staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
 
-Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show');
+// Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show');
 
-Route::post('/staff_export',[StaffController::class,'export'])->name('staff.export');
+Route::controller(StaffController::class)->prefix('staff')->group(function () {
+    Route::get('', 'index')->name('staff.index');
+    Route::post('', 'store')->name('staff.store');
+    Route::get('create', 'create')->name('staff.create');
+    Route::put('{staff}', 'update')->name('staff.update');
+    Route::get('{staff}/edit', 'edit')->name('staff.edit');
+    Route::delete('{staff}', 'destroy')->name('staff.destroy');
+    Route::get('{staff}', 'show')->name('staff.show');
+});
 
-Route::post('/staff_checkbox', [StaffController::class,'checkBox'])->name('staff.checkbox');
+Route::post('/staff_export', [StaffController::class, 'export'])->name('staff.export');
+
+Route::post('/staff_checkbox', [StaffController::class, 'checkBox'])->name('staff.checkbox');
 
 Route::post('/staff/{staff}/boards', [BoardController::class, 'store'])->name('board.store');
-
-
