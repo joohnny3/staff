@@ -24,7 +24,7 @@
     <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
     {{-- <script src="{{ asset('js/index.js') }}"></script> --}}
 
-    {{-- <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
+    <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     {{-- <script src="{{ asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script> --}}
     {{-- <script src="{{ asset('adminlte/plugins/jquery-mousewheel/jquery.mousewheel.js') }}"></script> --}}
