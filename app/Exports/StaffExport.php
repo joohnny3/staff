@@ -21,7 +21,7 @@ class StaffExport implements WithMultipleSheets
         $staffCollection = Staff::whereIn('id', $this->staff)->get()->map(function ($staff) {
             $replace = ['(', ')', '+', '-'];
             $staff->phone = str_replace($replace, '', $staff->phone);
-            $staff->phone = substr($staff->phone, 0, 3) . '###' . substr($staff->phone, -4);
+            $staff->phone = substr($staff->phone, 0, 4) . '###' . substr($staff->phone, -3);
             return $staff;
         });
 
