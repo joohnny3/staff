@@ -20,9 +20,13 @@ class StaffRepository
             }),
         ];
 
-        foreach ($filters as $filter) {
-            $search = $filter($search);
+        foreach ($filters as $key => $filter) {
+            if (!empty($request->input($key))) {
+                $search = $filter($search);
+            }
         }
+
+        //dd($search->toSql())
 
         return $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
     }
