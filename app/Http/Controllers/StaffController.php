@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\StaffExport;
 use App\Models\Staff;
+use App\Service\StaffService;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -17,54 +18,105 @@ class StaffController extends Controller
     /**
      * Display a listing of the resource.
      */
+    protected $staffService;
+
+    public function __construct(StaffService $staffService)
+    {
+        $this->staffService = $staffService;
+    }
+
     public function index(Request $request)
     {
         try {
             $request->validate([
                 'perPage' => 'integer',
             ]);
+
+            $data = $this->staffService->searchStaff($request);
+
+            return view('index', [
+                'data' => $data,
+                'perPage' => $data->perPage(),
+                'name' => $request->input('name'),
+                'phone' => $request->input('phone'),
+                'address' => $request->input('address'),
+                'message' => $request->input('message')
+            ]);
         } catch (ValidationException $t) {
-            abort(404);
+            return abort(404);
         }
 
-        $search = Staff::query();
+        //$search = Staff::query(); //Repository
 
-        $name = $request->input('name');
+        /*
+         $name = $request->input('name');
 
-        $phone = $request->input('phone');
+         $phone = $request->input('phone');
 
-        $address = $request->input('address');
+         $address = $request->input('address');
 
-        $message = $request->input('message');
+         $message = $request->input('message');
+        */
+
+        /**
+         * 改用filter方式
+         * if ($request->input('searchFlag')) {
+         * session()->forget('staff_checkbox_ids');
+         * }
+         *
+         * if ($name !== null && $name !== '') {
+         * $search = $search->where('name', 'LIKE', "%{$name}%");
+         * }
+         *
+         * if ($phone !== null && $phone !== '') {
+         * $search = $search->where('phone', 'LIKE', "%{$phone}%");
+         * }
+         *
+         * if ($address !== null && $address !== '') {
+         * $search = $search->where('address', 'LIKE', "%{$address}%");
+         * }
+         *
+         * if ($message !== null && $message !== '') {
+         * $search = $search->whereHas('boards', function (Builder $query) use ($message) {
+         * $query->where('content', 'LIKE', "%{$message}%");
+         * });
+         * }
+         */
+
+        /* 分層架構 Service
+        $filters = [
+            'name' => fn($search, $value) => $search->where('name', 'LIKE', "%{$value}%"),
+            'phone' => fn($search, $value) => $search->where('phone', 'LIKE', "%{$value}%"),
+            'address' => fn($search, $value) => $search->where('address', 'LIKE', "%{$value}%"),
+            'message' => fn($search, $value) => $search->whereHas('boards', function (Builder $query) use ($message) {
+                $query->where('content', 'LIKE', "%{$message}%");
+            }),
+        ];
+
+        foreach ($filters as $key => $v) {
+            $value = $request->input($key);
+            if (!empty($value)) {
+                $v($search, $value);
+            }
+        }
 
         if ($request->input('searchFlag')) {
             session()->forget('staff_checkbox_ids');
         }
 
-        if ($name !== null && $name !== '') {
-            $search = $search->where('name', 'LIKE', "%{$name}%");
-        }
-
-        if ($phone !== null && $phone !== '') {
-            $search = $search->where('phone', 'LIKE', "%{$phone}%");
-        }
-
-        if ($address !== null && $address !== '') {
-            $search = $search->where('address', 'LIKE', "%{$address}%");
-        }
-
-        if ($message !== null && $message !== '') {
-            $search = $search->whereHas('boards', function (Builder $query) use ($message) {
-                $query->where('content', 'LIKE', "%{$message}%");
-            });
-        }
-
         $perPage = $request->get('perPage', 30);
 
-        $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
 
 
-        return view('index', ['data' => $data, 'perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address, 'message' => $message]);
+        return view('index', [
+            'data' => $data,
+            'perPage' => $perPage,
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'message' => $request->input('message')
+        ]);
+        */
     }
 
     /**
