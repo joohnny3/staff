@@ -119,10 +119,7 @@ class StaffController extends Controller
         */
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addStaffView()
     {
         return view('create');
     }
@@ -130,7 +127,7 @@ class StaffController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function addStaff(Request $request)
     {
         try {
             DB::beginTransaction();
@@ -154,10 +151,7 @@ class StaffController extends Controller
         return redirect()->route('staff.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function getStaff(string $id)
     {
         $data = Staff::with('boards')->find($id);
 
@@ -192,7 +186,7 @@ class StaffController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editStaffView(string $id)
     {
         $data = Staff::find($id);
         if (!$data) {
@@ -205,7 +199,7 @@ class StaffController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function editStaff(Request $request, string $id)
     {
         try {
             DB::beginTransaction();
@@ -239,7 +233,7 @@ class StaffController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function deleteStaff($id)
     {
         try {
             DB::beginTransaction();

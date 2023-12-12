@@ -10,7 +10,7 @@ use Throwable;
 
 class BoardController extends Controller
 {
-    public function store(Request $request, Staff $staff)
+    public function addMessage(Request $request, Staff $staff)
     {
         if (isset($request->board_id)) {
             try {
