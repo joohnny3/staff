@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Models\Staff;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StaffRepository
 {
@@ -27,7 +29,21 @@ class StaffRepository
         }
 
         //dd($search->toSql())
-
         return $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
+    }
+
+    public function add($data)
+    {
+        try {
+            DB::beginTransaction();
+
+            Staff::create($data);
+
+            DB::commit();
+        } catch (\Throwable $throwable) {
+            DB::rollBack();
+            Log::error($throwable->getMessage());
+            throw $throwable;
+        }
     }
 }

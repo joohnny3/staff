@@ -9,15 +9,13 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class StaffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     protected $staffService;
 
     public function __construct(StaffService $staffService)
@@ -124,31 +122,29 @@ class StaffController extends Controller
         return view('create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function addStaff(Request $request)
     {
         try {
-            DB::beginTransaction();
-
+            //DB::beginTransaction();
             $data = $request->validate([
                 'name' => 'required|string|max:24',
                 'phone' => 'required|string|max:30',
                 'address' => 'required|string|max:100',
             ]);
 
-            Staff::create($data);
+            //Staff::create($data);
 
-            DB::commit();
+            //DB::commit();
+            $this->staffService->addStaff($data);
+
+            return redirect()->route('staff.index');
         } catch (ValidationException $t) {
+            //DB::rollBack();
 
-            DB::rollBack();
+            Log::error($t->getMessage());
 
-            abort(404);
+            return abort(404);
         }
-
-        return redirect()->route('staff.index');
     }
 
     public function getStaff(string $id)
@@ -183,9 +179,6 @@ class StaffController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function editStaffView(string $id)
     {
         $data = Staff::find($id);
@@ -196,9 +189,6 @@ class StaffController extends Controller
         return view('edit')->with('data', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function editStaff(Request $request, string $id)
     {
         try {
@@ -230,9 +220,6 @@ class StaffController extends Controller
         return redirect()->route('staff.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function deleteStaff($id)
     {
         try {

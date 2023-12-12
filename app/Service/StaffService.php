@@ -25,4 +25,9 @@ class StaffService
 
         return $this->staffRepository->search($request, $perPage);
     }
+
+    public function addStaff($data)
+    {
+        return $this->staffRepository->add($data);
+    }
 }
