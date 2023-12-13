@@ -34,32 +34,11 @@ class StaffService
 
     public function getStaff($id)
     {
-        $data = $this->staffRepository->get($id);
+        return $this->staffRepository->get($id);
+    }
 
-        if (empty($data)) {
-            Log::error('not found data');
-            abort(404);
-        }
-
-        $data->boards->reduce(
-            function ($carry, $board) use ($data) {
-
-                if ($board->board_id) {
-                    $carry[$board->board_id][] = $board->content;
-                }
-
-                $data->boards->each(
-                    function ($board) use ($carry) {
-                        if (array_key_exists($board->id, $carry)) {
-                            $board->reply_contents = $carry[$board->id];
-                        }
-                    }
-                );
-                return $carry;
-            },
-            []
-        );
-
-        return $data;
+    public function editStaffView($id)
+    {
+        return $this->staffRepository->editView($id);
     }
 }

@@ -181,10 +181,12 @@ class StaffController extends Controller
 
     public function editStaffView(string $id)
     {
-        $data = Staff::find($id);
+        $data = $this->staffService->editStaffView($id);
+
+        /*$data = Staff::find($id);
         if (!$data) {
             abort(404);
-        }
+        }*/
 
         return view('edit')->with('data', $data);
     }

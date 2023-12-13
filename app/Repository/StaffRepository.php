@@ -49,7 +49,41 @@ class StaffRepository
 
     public function get($id)
     {
-        return Staff::with('boards')->find($id);
+        $data = Staff::with('boards')->find($id);
+
+        if (empty($data)) {
+            Log::error('not found data');
+            abort(404);
+        }
+
+        $data->boards->reduce(
+            function ($carry, $board) use ($data) {
+
+                if ($board->board_id) {
+                    $carry[$board->board_id][] = $board->content;
+                }
+
+                $data->boards->each(
+                    function ($board) use ($carry) {
+                        if (array_key_exists($board->id, $carry)) {
+                            $board->reply_contents = $carry[$board->id];
+                        }
+                    }
+                );
+                return $carry;
+            },
+            []
+        );
+        return $data;
+    }
+
+    public function editView($id)
+    {
+        $data = Staff::find($id);
+        if (!$data) {
+            abort(404);
+        }
+        return $data;
     }
 
 
