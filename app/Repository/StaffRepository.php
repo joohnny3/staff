@@ -46,4 +46,11 @@ class StaffRepository
             throw $throwable;
         }
     }
+
+    public function get($id)
+    {
+        return Staff::with('boards')->find($id);
+    }
+
+
 }

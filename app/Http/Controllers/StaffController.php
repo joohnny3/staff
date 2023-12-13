@@ -149,13 +149,12 @@ class StaffController extends Controller
 
     public function getStaff(string $id)
     {
-        $data = Staff::with('boards')->find($id);
-
-        if (!$data) {
+        //$data = Staff::with('boards')->find($id);
+        /*if (empty($data)) {
+            Log::error('not found data');
             abort(404);
-        }
-
-        $data->boards->reduce(
+        }*/
+        /*$data->boards->reduce(
             function ($carry, $board) use ($data) {
 
                 if ($board->board_id) {
@@ -172,7 +171,8 @@ class StaffController extends Controller
                 return $carry;
             },
             []
-        );
+        );*/
+        $data = $this->staffService->getStaff($id);
 
         return view('board', [
             'staff' => $data,
