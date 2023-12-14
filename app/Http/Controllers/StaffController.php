@@ -193,7 +193,9 @@ class StaffController extends Controller
 
     public function editStaff(Request $request, string $id)
     {
-        try {
+        $this->staffService->editStaff($request, $id);
+
+        /*try {
             DB::beginTransaction();
 
             if (!$id) {
@@ -216,9 +218,7 @@ class StaffController extends Controller
             DB::rollBack();
 
             abort(404);
-        }
-
-
+        }*/
         return redirect()->route('staff.index');
     }
 

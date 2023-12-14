@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Matrix\Exception;
 
 class StaffRepository
 {
@@ -84,6 +85,31 @@ class StaffRepository
             abort(404);
         }
         return $data;
+    }
+
+    public function edit(Request $request, string $id)
+    {
+        try {
+            DB::beginTransaction();
+            if (!$id) {
+                throw new Exception('Not Found Edit ID');
+            }
+
+            $item = Staff::find($id);
+            if (!$item) {
+                throw new Exception('Not Found Edit Staff');
+            }
+
+            $item->name = $request['name'];
+            $item->phone = $request['phone'];
+            $item->address = $request['address'];
+            $item->save();
+
+            DB::commit();
+        } catch (\Throwable $throwable) {
+            DB::rollBack();
+            Log::error($throwable->getMessage());
+        }
     }
 
     public function delete(string $id)

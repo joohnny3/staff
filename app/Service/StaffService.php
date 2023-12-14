@@ -41,6 +41,11 @@ class StaffService
         return $this->staffRepository->editView($id);
     }
 
+    public function editStaff(Request $request, string $id)
+    {
+        return $this->staffRepository->edit($request, $id);
+    }
+
     public function deleteStaff(string $id)
     {
         return $this->staffRepository->delete($id);
