@@ -64,4 +64,21 @@ class StaffService
             return abort(404);
         }
     }
+
+    public function checkBoxSession(Request $request)
+    {
+        try {
+            $nowIds = session('staff_checkbox_ids', []);
+
+            $newIds = $request->selectedIds;
+
+            $allIds = array_unique(array_merge($nowIds, $newIds));
+
+            session(['staff_checkbox_ids' => $allIds]);
+        } catch (\Throwable $throwable) {
+            Log::error($throwable->getMessage());
+
+            return abort(404);
+        }
+    }
 }

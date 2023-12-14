@@ -242,7 +242,6 @@ class StaffController extends Controller
         return redirect()->route('staff.index');
     }
 
-
     public function export(Request $request)
     {
         $staffIds = $this->staffService->exportStaff($request);
@@ -264,18 +263,21 @@ class StaffController extends Controller
 
     public function checkBoxSession(Request $request)
     {
-        try {
-            $nowIds = session('staff_checkbox_ids', []);
+        $this->staffService->checkBoxSession($request);
 
-            $newIds = $request->selectedIds;
+        /* try {
+             $nowIds = session('staff_checkbox_ids', []);
 
-            $allIds = array_unique(array_merge($nowIds, $newIds));
+             $newIds = $request->selectedIds;
 
-            session(['staff_checkbox_ids' => $allIds]);
+             $allIds = array_unique(array_merge($nowIds, $newIds));
 
-            return response(null, 200);
-        } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
+             session(['staff_checkbox_ids' => $allIds]);
+
+         } catch (\Throwable $th) {
+             return response()->json(['error' => $th->getMessage()], 500);
+         }*/
+
+        return response(null, 200);
     }
 }
