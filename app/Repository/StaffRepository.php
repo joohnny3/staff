@@ -3,13 +3,14 @@
 namespace App\Repository;
 
 use App\Models\Staff;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StaffRepository
 {
-    public function search($request, $perPage)
+    public function search(Request $request, int $perPage)
     {
         $search = Staff::query();
 
@@ -28,11 +29,10 @@ class StaffRepository
             }
         }
 
-        //dd($search->toSql())
         return $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
     }
 
-    public function add($data)
+    public function add(array $data)
     {
         try {
             DB::beginTransaction();
@@ -47,7 +47,7 @@ class StaffRepository
         }
     }
 
-    public function get($id)
+    public function get(string $id)
     {
         $data = Staff::with('boards')->find($id);
 
@@ -77,7 +77,7 @@ class StaffRepository
         return $data;
     }
 
-    public function editView($id)
+    public function editView(string $id)
     {
         $data = Staff::find($id);
         if (!$data) {
@@ -86,5 +86,19 @@ class StaffRepository
         return $data;
     }
 
+    public function delete(string $id)
+    {
+        try {
+            DB::beginTransaction();
 
+            $data = Staff::findOrFail($id);
+            $data->delete();
+
+            DB::commit();
+        } catch (\Throwable $t) {
+            DB::rollBack();
+
+            abort(404);
+        }
+    }
 }

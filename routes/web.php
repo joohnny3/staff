@@ -28,6 +28,6 @@ Route::controller(StaffController::class)->prefix('staff')->group(function () {
 
 Route::post('/staff_export', [StaffController::class, 'export'])->name('staff.export');
 
-Route::post('/staff_checkbox', [StaffController::class, 'checkBox'])->name('staff.checkbox');
+Route::post('/staff_checkbox', [StaffController::class, 'checkBoxSession'])->name('staff.checkbox');
 
 Route::post('/staff/{staff}/boards', [BoardController::class, 'addMessage'])->name('board.store');

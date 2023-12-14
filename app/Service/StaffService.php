@@ -3,9 +3,7 @@
 namespace App\Service;
 
 use App\Repository\StaffRepository;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class StaffService
 {
@@ -27,18 +25,23 @@ class StaffService
         return $this->staffRepository->search($request, $perPage);
     }
 
-    public function addStaff($data)
+    public function addStaff(array $data)
     {
         return $this->staffRepository->add($data);
     }
 
-    public function getStaff($id)
+    public function getStaff(string $id)
     {
         return $this->staffRepository->get($id);
     }
 
-    public function editStaffView($id)
+    public function editStaffView(string $id)
     {
         return $this->staffRepository->editView($id);
+    }
+
+    public function deleteStaff(string $id)
+    {
+        return $this->staffRepository->delete($id);
     }
 }

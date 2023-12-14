@@ -222,9 +222,11 @@ class StaffController extends Controller
         return redirect()->route('staff.index');
     }
 
-    public function deleteStaff($id)
+    public function deleteStaff(string $id)
     {
-        try {
+        $this->staffService->deleteStaff($id);
+
+        /*try {
             DB::beginTransaction();
 
             $data = Staff::findOrFail($id);
@@ -235,7 +237,8 @@ class StaffController extends Controller
             DB::rollBack();
 
             abort(404);
-        }
+        }*/
+
         return redirect()->route('staff.index');
     }
 
@@ -257,7 +260,7 @@ class StaffController extends Controller
         }
     }
 
-    public function checkBox(Request $request)
+    public function checkBoxSession(Request $request)
     {
         try {
             $nowIds = session('staff_checkbox_ids', []);
