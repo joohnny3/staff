@@ -245,7 +245,9 @@ class StaffController extends Controller
 
     public function export(Request $request)
     {
-        try {
+        $staffIds = $this->staffService->exportStaff($request);
+
+        /*try {
             $sessionIds = session('staff_checkbox_ids', []);
 
             $inputIds = $request->input('staff_id', []);
@@ -254,10 +256,10 @@ class StaffController extends Controller
 
             session()->forget('staff_checkbox_ids');
 
-            return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
         } catch (\Throwable $th) {
             abort(404);
-        }
+        }*/
+        return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
     }
 
     public function checkBoxSession(Request $request)

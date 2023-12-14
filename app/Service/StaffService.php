@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repository\StaffRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StaffService
 {
@@ -43,5 +44,24 @@ class StaffService
     public function deleteStaff(string $id)
     {
         return $this->staffRepository->delete($id);
+    }
+
+    public function exportStaff(Request $request)
+    {
+        try {
+            $sessionIds = session('staff_checkbox_ids', []);
+
+            $inputIds = $request->input('staff_id', []);
+
+            $staffIds = array_unique(array_merge($inputIds, $sessionIds));
+
+            session()->forget('staff_checkbox_ids');
+
+            return $staffIds;
+        } catch (\Throwable $throwable) {
+            Log::error($throwable->getMessage());
+
+            return abort(404);
+        }
     }
 }
