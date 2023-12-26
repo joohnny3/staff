@@ -45,7 +45,7 @@ function deselectAll() {
 function deleteStaff(staffId) {
     if (confirm("確定刪除嗎？")) {
         const deleteForm = document.querySelector("#deleteForm");
-        deleteForm.action = "/staff/" + staffId;
+        deleteForm.action = "staff/" + staffId;
         deleteForm.submit();
     }
 }
@@ -64,7 +64,7 @@ function excelDownload() {
         excelDownloadForm.appendChild(input);
     });
 
-    excelDownloadForm.action = "/staff_export/";
+    excelDownloadForm.action = "staff_export/";
     excelDownloadForm.submit();
     window.location.reload();
 }
@@ -129,7 +129,7 @@ async function saveCheckboxState(url) {
     ].map((checkbox) => checkbox.value);
 
     try {
-        const response = await fetch("/staff_checkbox", {
+        const response = await fetch("staff_checkbox", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
