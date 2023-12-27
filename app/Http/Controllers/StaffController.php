@@ -174,9 +174,11 @@ class StaffController extends Controller
         );*/
         $data = $this->staffService->getStaff($id);
 
-        return view('board', [
-            'staff' => $data,
-        ]);
+         return view('board', [
+             'staff' => $data,
+         ]);
+
+         //return response()->hello();
     }
 
     public function editStaffView(string $id)
