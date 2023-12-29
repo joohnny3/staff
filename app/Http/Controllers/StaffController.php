@@ -4,116 +4,157 @@ namespace App\Http\Controllers;
 
 use App\Exports\StaffExport;
 use App\Models\Staff;
+use App\Service\StaffService;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class StaffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $staffService;
+
+    public function __construct(StaffService $staffService)
+    {
+        $this->staffService = $staffService;
+    }
+
     public function index(Request $request)
     {
         try {
             $request->validate([
                 'perPage' => 'integer',
             ]);
+
+            $data = $this->staffService->searchStaff($request);
+
+            return view('index', [
+                'data' => $data,
+                'perPage' => $data->perPage(),
+                'name' => $request->input('name'),
+                'phone' => $request->input('phone'),
+                'address' => $request->input('address'),
+                'message' => $request->input('message')
+            ]);
         } catch (ValidationException $t) {
-            abort(404);
+            return abort(404);
         }
 
-        $search = Staff::query();
+        //$search = Staff::query(); //Repository
 
-        $name = $request->input('name');
+        /*
+         $name = $request->input('name');
 
-        $phone = $request->input('phone');
+         $phone = $request->input('phone');
 
-        $address = $request->input('address');
+         $address = $request->input('address');
 
-        $message = $request->input('message');
+         $message = $request->input('message');
+        */
+
+        /**
+         * 改用filter方式
+         * if ($request->input('searchFlag')) {
+         * session()->forget('staff_checkbox_ids');
+         * }
+         *
+         * if ($name !== null && $name !== '') {
+         * $search = $search->where('name', 'LIKE', "%{$name}%");
+         * }
+         *
+         * if ($phone !== null && $phone !== '') {
+         * $search = $search->where('phone', 'LIKE', "%{$phone}%");
+         * }
+         *
+         * if ($address !== null && $address !== '') {
+         * $search = $search->where('address', 'LIKE', "%{$address}%");
+         * }
+         *
+         * if ($message !== null && $message !== '') {
+         * $search = $search->whereHas('boards', function (Builder $query) use ($message) {
+         * $query->where('content', 'LIKE', "%{$message}%");
+         * });
+         * }
+         */
+
+        /* 分層架構 Service
+        $filters = [
+            'name' => fn($search, $value) => $search->where('name', 'LIKE', "%{$value}%"),
+            'phone' => fn($search, $value) => $search->where('phone', 'LIKE', "%{$value}%"),
+            'address' => fn($search, $value) => $search->where('address', 'LIKE', "%{$value}%"),
+            'message' => fn($search, $value) => $search->whereHas('boards', function (Builder $query) use ($message) {
+                $query->where('content', 'LIKE', "%{$message}%");
+            }),
+        ];
+
+        foreach ($filters as $key => $v) {
+            $value = $request->input($key);
+            if (!empty($value)) {
+                $v($search, $value);
+            }
+        }
 
         if ($request->input('searchFlag')) {
             session()->forget('staff_checkbox_ids');
         }
 
-        if ($name !== null && $name !== '') {
-            $search = $search->where('name', 'LIKE', "%{$name}%");
-        }
-
-        if ($phone !== null && $phone !== '') {
-            $search = $search->where('phone', 'LIKE', "%{$phone}%");
-        }
-
-        if ($address !== null && $address !== '') {
-            $search = $search->where('address', 'LIKE', "%{$address}%");
-        }
-
-        if ($message !== null && $message !== '') {
-            $search = $search->whereHas('boards', function (Builder $query) use ($message) {
-                $query->where('content', 'LIKE', "%{$message}%");
-            });
-        }
-
         $perPage = $request->get('perPage', 30);
 
-        $data = $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
 
 
-        return view('index', ['data' => $data, 'perPage' => $perPage, 'name' => $name, 'phone' => $phone, 'address' => $address, 'message' => $message]);
+        return view('index', [
+            'data' => $data,
+            'perPage' => $perPage,
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'message' => $request->input('message')
+        ]);
+        */
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addStaffView()
     {
         return view('create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function addStaff(Request $request)
     {
         try {
-            DB::beginTransaction();
-
+            //DB::beginTransaction();
             $data = $request->validate([
                 'name' => 'required|string|max:24',
                 'phone' => 'required|string|max:30',
                 'address' => 'required|string|max:100',
             ]);
 
-            Staff::create($data);
+            //Staff::create($data);
 
-            DB::commit();
+            //DB::commit();
+            $this->staffService->addStaff($data);
+
+            return redirect()->route('staff.index');
         } catch (ValidationException $t) {
+            //DB::rollBack();
 
-            DB::rollBack();
+            Log::error($t->getMessage());
 
-            abort(404);
+            return abort(404);
         }
-
-        return redirect()->route('staff.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function getStaff(string $id)
     {
-        $data = Staff::with('boards')->find($id);
-
-        if (!$data) {
+        //$data = Staff::with('boards')->find($id);
+        /*if (empty($data)) {
+            Log::error('not found data');
             abort(404);
-        }
-
-        $data->boards->reduce(
+        }*/
+        /*$data->boards->reduce(
             function ($carry, $board) use ($data) {
 
                 if ($board->board_id) {
@@ -130,32 +171,33 @@ class StaffController extends Controller
                 return $carry;
             },
             []
-        );
+        );*/
+        $data = $this->staffService->getStaff($id);
 
-        return view('board', [
-            'staff' => $data,
-        ]);
+         return view('board', [
+             'staff' => $data,
+         ]);
+
+         //return response()->hello();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function editStaffView(string $id)
     {
-        $data = Staff::find($id);
+        $data = $this->staffService->editStaffView($id);
+
+        /*$data = Staff::find($id);
         if (!$data) {
             abort(404);
-        }
+        }*/
 
         return view('edit')->with('data', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function editStaff(Request $request, string $id)
     {
-        try {
+        $this->staffService->editStaff($request, $id);
+
+        /*try {
             DB::beginTransaction();
 
             if (!$id) {
@@ -178,18 +220,15 @@ class StaffController extends Controller
             DB::rollBack();
 
             abort(404);
-        }
-
-
+        }*/
         return redirect()->route('staff.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function deleteStaff(string $id)
     {
-        try {
+        $this->staffService->deleteStaff($id);
+
+        /*try {
             DB::beginTransaction();
 
             $data = Staff::findOrFail($id);
@@ -200,14 +239,16 @@ class StaffController extends Controller
             DB::rollBack();
 
             abort(404);
-        }
+        }*/
+
         return redirect()->route('staff.index');
     }
 
-
     public function export(Request $request)
     {
-        try {
+        $staffIds = $this->staffService->exportStaff($request);
+
+        /*try {
             $sessionIds = session('staff_checkbox_ids', []);
 
             $inputIds = $request->input('staff_id', []);
@@ -216,26 +257,29 @@ class StaffController extends Controller
 
             session()->forget('staff_checkbox_ids');
 
-            return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
         } catch (\Throwable $th) {
             abort(404);
-        }
+        }*/
+        return Excel::download(new StaffExport($staffIds), 'staff.xlsx');
     }
 
-    public function checkBox(Request $request)
+    public function checkBoxSession(Request $request)
     {
-        try {
-            $nowIds = session('staff_checkbox_ids', []);
+        $this->staffService->checkBoxSession($request);
 
-            $newIds = $request->selectedIds;
+        /* try {
+             $nowIds = session('staff_checkbox_ids', []);
 
-            $allIds = array_unique(array_merge($nowIds, $newIds));
+             $newIds = $request->selectedIds;
 
-            session(['staff_checkbox_ids' => $allIds]);
+             $allIds = array_unique(array_merge($nowIds, $newIds));
 
-            return response(null, 200);
-        } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
+             session(['staff_checkbox_ids' => $allIds]);
+
+         } catch (\Throwable $th) {
+             return response()->json(['error' => $th->getMessage()], 500);
+         }*/
+
+        return response(null, 200);
     }
 }
