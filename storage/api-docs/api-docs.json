@@ -1,0 +1,110 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Employee ",
+        "description": "Employee description",
+        "contact": {
+            "email": "developer@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://api-host.dev.app",
+            "description": "測試區主機"
+        },
+        {
+            "url": "http://localhost/XXXXX",
+            "description": "Localhost"
+        }
+    ],
+    "paths": {
+        "/": {},
+        "/login": {
+            "post": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "登入",
+                "description": "Js-Adways3.0系統登入頁面",
+                "operationId": "7184e5a6e4516ccd27847482b267fa4a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ]
+                            },
+                            "example": {
+                                "username": "johnny.chang@js-adways.com.tw",
+                                "password": "123456"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "請求成功",
+                        "headers": {
+                            "test": {
+                                "description": "Employee request ID",
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": 200,
+                                    "data": {
+                                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+                                        "system": [
+                                            {
+                                                "id": 1,
+                                                "name": "電子簽核系統"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "工單系統"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "客戶端錯誤"
+                    },
+                    "401": {
+                        "description": "身份驗證失敗"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "Authorization": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}
