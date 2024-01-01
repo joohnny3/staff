@@ -1,0 +1,89 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "L5 OpenApi",
+        "description": "L5 Swagger OpenApi description",
+        "contact": {
+            "email": "developer@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://api-host.dev.app",
+            "description": "測試區主機"
+        },
+        {
+            "url": "http://localhost/XXXXX",
+            "description": "Localhost"
+        }
+    ],
+    "paths": {
+        "/": {},
+        "/login": {
+            "post": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "登入頁面",
+                "description": "這個api的詳細說明",
+                "operationId": "7184e5a6e4516ccd27847482b267fa4a",
+                "parameters": [
+                    {
+                        "name": "帶入的參數名稱",
+                        "in": "path",
+                        "description": "帶入的參數說明",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功"
+                    },
+                    "220": {
+                        "$ref": "#/components/responses/commonSuccess"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "commonSuccess": {
+                "description": "请求成功",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "请求已成功处理"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Authorization": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}
