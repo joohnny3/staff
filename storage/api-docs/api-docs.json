@@ -84,10 +84,181 @@
                         }
                     },
                     "400": {
-                        "description": "客戶端錯誤"
+                        "$ref": "#/components/responses/400"
                     },
                     "401": {
-                        "description": "身份驗證失敗"
+                        "$ref": "#/components/responses/401"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/permission": {
+            "post": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "取得權限",
+                "description": "選取子系統獲取個人權限",
+                "operationId": "3973f41638d3e5eabac15f48f71f1f73",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ]
+                            },
+                            "example": {
+                                "status": 200,
+                                "data": {
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                                    "system_id": 1
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "請求成功",
+                        "headers": {
+                            "test": {
+                                "description": "Employee request ID",
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": 200,
+                                    "data": {
+                                        "name": "Johnny",
+                                        "page": [
+                                            "系統管理",
+                                            "系統權限管理"
+                                        ],
+                                        "function": [
+                                            "系統管理編輯功能",
+                                            "系統管理查閱"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/employee": {
+            "get": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "員工列表",
+                "description": "Js-Adways員工列表",
+                "operationId": "276cb54e2c380d74dbfcf8ad495c9cd5",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "path",
+                        "description": "關鍵字， 姓名，職稱",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "description": "員工在職狀態",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3,
+                                4
+                            ]
+                        }
+                    },
+                    {
+                        "name": "department",
+                        "in": "path",
+                        "description": "部門ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3,
+                                4
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "請求成功",
+                        "headers": {
+                            "test": {
+                                "description": "Employee request ID",
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "code": 200,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "鄧雲澤",
+                                            "name_en": "van",
+                                            "job_title": "財務長",
+                                            "job_title_en": "Chief Financial Officer",
+                                            "status": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/405"
                     }
                 },
                 "security": [
@@ -99,6 +270,56 @@
         }
     },
     "components": {
+        "responses": {
+            "400": {
+                "description": "客戶端錯誤",
+                "content": {
+                    "application/json": {
+                        "schema": {},
+                        "example": {
+                            "status": 400,
+                            "message": "Bad Request"
+                        }
+                    }
+                }
+            },
+            "401": {
+                "description": "身份驗證失敗",
+                "content": {
+                    "application/json": {
+                        "schema": {},
+                        "example": {
+                            "status": 401,
+                            "message": "Unauthorized"
+                        }
+                    }
+                }
+            },
+            "404": {
+                "description": "找不到請求的資源",
+                "content": {
+                    "application/json": {
+                        "schema": {},
+                        "example": {
+                            "status": 404,
+                            "message": "Not Found"
+                        }
+                    }
+                }
+            },
+            "405": {
+                "description": "不支援此方法",
+                "content": {
+                    "application/json": {
+                        "schema": {},
+                        "example": {
+                            "status": 405,
+                            "message": "Method Not Allowed"
+                        }
+                    }
+                }
+            }
+        },
         "securitySchemes": {
             "Authorization": {
                 "type": "apiKey",
