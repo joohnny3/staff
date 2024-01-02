@@ -21,17 +21,11 @@ class StaffRepository
             'address_k' => $request->input('address'),
         ];
 
-        /*
-        if (!empty($filters)) {
-            $search = $search->filter($filters);
-        }
-        */
+        $search = $search->whereHas('boards', function (Builder $query) use ($request) {
+            $array = ['content_k' => $request->input('message')];
+            $query->filter($array);
+        });
 
-        if ($request->filled('message')) {
-            $search = $search->whereHas('boards', function (Builder $query) use ($request) {
-                $query->where('content', 'LIKE', '%' . $request->input('message') . '%');
-            });
-        }
 
         /*
         $filters = [
@@ -92,7 +86,7 @@ class StaffRepository
                 $data->boards->each(
                     function ($board) use ($carry) {
                         if (array_key_exists($board->id, $carry)) {
-                            $board->reply_contents = $carry[$board ->id];
+                            $board->reply_contents = $carry[$board->id];
                         }
                     }
                 );
