@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf34c41c87ccc156777e03dd1296ce66",
+    "content-hash": "46e109b775fd6b9fa36cc1c1ef0fe54f",
     "packages": [
         {
             "name": "brick/math",
@@ -1267,6 +1267,39 @@
                 }
             ],
             "time": "2023-08-27T10:19:19+00:00"
+        },
+        {
+            "name": "jsadways/scopefilter",
+            "version": "0.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JsAdways/scopeFilter.git",
+                "reference": "60798da99dfbb3ec31d26f7da3da3038e2546c5c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JsAdways/scopeFilter/zipball/60798da99dfbb3ec31d26f7da3da3038e2546c5c",
+                "reference": "60798da99dfbb3ec31d26f7da3da3038e2546c5c",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jsadways\\ScopeFilter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Js-Adways",
+                    "email": "it@js-adways.com.tw"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/JsAdways/scopeFilter/issues",
+                "source": "https://github.com/JsAdways/scopeFilter/tree/0.1.6"
+            },
+            "time": "2023-12-29T07:27:59+00:00"
         },
         {
             "name": "laravel/framework",
