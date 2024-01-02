@@ -271,6 +271,18 @@
     },
     "components": {
         "responses": {
+            "200": {
+                "description": "成功",
+                "content": {
+                    "application/json": {
+                        "schema": {},
+                        "example": {
+                            "status": 200,
+                            "message": "OK"
+                        }
+                    }
+                }
+            },
             "400": {
                 "description": "客戶端錯誤",
                 "content": {

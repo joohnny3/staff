@@ -50,7 +50,11 @@ class StaffRepository
 
     public function get(string $id)
     {
-        $data = Staff::with('boards')->find($id);
+        $filters = [
+            'id_eq' => $id
+        ];
+
+        $data = Staff::with('boards')->filter($filters)->first();
 
         if (empty($data)) {
             Log::error('not found data');
@@ -80,7 +84,12 @@ class StaffRepository
 
     public function editView(string $id)
     {
-        $data = Staff::find($id);
+        $filters = [
+            'id_eq' => $id
+        ];
+
+        $data = Staff::filter($filters)->first();
+
         if (!$data) {
             abort(404);
         }
@@ -95,7 +104,12 @@ class StaffRepository
                 throw new Exception('Not Found Edit ID');
             }
 
-            $item = Staff::find($id);
+            $filters = [
+                'id_eq' => $id
+            ];
+
+            $item = Staff::filter($filters)->firstOrFail();
+
             if (!$item) {
                 throw new Exception('Not Found Edit Staff');
             }
@@ -117,7 +131,11 @@ class StaffRepository
         try {
             DB::beginTransaction();
 
-            $data = Staff::findOrFail($id);
+            $filters = [
+                'id_eq' => $id
+            ];
+
+            $data = Staff::filter($filters)->firstOrFail();
             $data->delete();
 
             DB::commit();

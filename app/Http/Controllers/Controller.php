@@ -39,6 +39,16 @@ use Illuminate\Routing\Controller as BaseController;
  * )
  * @OA\Components(
  *     @OA\Response(
+ *          response="200",
+ *          description="成功",
+ *          @OA\JsonContent(
+ *              example={
+ *                  "status":200,
+ *                  "message":"OK",
+ *              }
+ *          ),
+ *     ),
+ *     @OA\Response(
  *         response="400",
  *         description="客戶端錯誤",
  *         @OA\JsonContent(
