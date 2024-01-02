@@ -16,11 +16,31 @@ class StaffRepository
         $search = Staff::query();
 
         $filters = [
+            'name_k' => $request->input('name'),
+            'phone_k' => $request->input('phone'),
+            'address_k' => $request->input('address'),
+        ];
+
+        /*
+        if (!empty($filters)) {
+            $search = $search->filter($filters);
+        }
+        */
+
+        if ($request->filled('message')) {
+            $search = $search->whereHas('boards', function (Builder $query) use ($request) {
+                $query->where('content', 'LIKE', '%' . $request->input('message') . '%');
+            });
+        }
+
+        /*
+        $filters = [
             'name' => fn($search) => $search->where('name', 'LIKE', '%' . $request->input('name') . '%'),
             'phone' => fn($search) => $search->where('phone', 'LIKE', '%' . $request->input('phone') . '%'),
             'address' => fn($search) => $search->where('address', 'LIKE', '%' . $request->input('address') . '%'),
             'message' => fn($search) => $search->whereHas('boards', function (Builder $query) use ($request) {
-                $query->where('content', 'LIKE', "%{$request->input('message')}%");
+                $query->where('content', 'LIKE', " %{
+                    $request->input('message')}%");
             }),
         ];
 
@@ -29,8 +49,9 @@ class StaffRepository
                 $search = $filter($search);
             }
         }
+        */
 
-        return $search->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
+        return $search->filter($filters)->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'pages');
     }
 
     public function add(array $data)
@@ -71,7 +92,7 @@ class StaffRepository
                 $data->boards->each(
                     function ($board) use ($carry) {
                         if (array_key_exists($board->id, $carry)) {
-                            $board->reply_contents = $carry[$board->id];
+                            $board->reply_contents = $carry[$board ->id];
                         }
                     }
                 );
