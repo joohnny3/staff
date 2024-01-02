@@ -24,6 +24,101 @@
     ],
     "paths": {
         "/": {},
+        "/department/{departmentId}": {
+            "put": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "更新部門資料",
+                "description": "更新部門資料",
+                "operationId": "5b735ec13395ec7e0f8c634fab74836a",
+                "parameters": [
+                    {
+                        "name": "DepartmentId",
+                        "in": "path",
+                        "description": "部門ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ]
+                            },
+                            "example": {
+                                "name": "資訊管理部",
+                                "name_en": "IT",
+                                "status": 1,
+                                "type": 2,
+                                "parent": "管理處",
+                                "manager_id": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/200"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "刪除部門資料",
+                "description": "刪除部門資料",
+                "operationId": "3402865b017c3332dce70fe0aaf5f79a",
+                "parameters": [
+                    {
+                        "name": "DepartmentId",
+                        "in": "path",
+                        "description": "部門ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/200"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
         "/login": {
             "post": {
                 "tags": [
@@ -259,6 +354,104 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/405"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/employee/{employeeId}": {
+            "patch": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "更新員工資料",
+                "description": "更新員工資料包含部門,權限群組,緊急聯絡人",
+                "operationId": "f248527999d19b6165a5c363144bbe66",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ]
+                            },
+                            "example": {
+                                "employee_id": 2,
+                                "employee_no": "A0002",
+                                "name": "財務長",
+                                "name_en": "Van",
+                                "birthday": "1977-09-03",
+                                "gender": 1,
+                                "id_number": "A188888888",
+                                "phone_number": "0977895561",
+                                "address": "110台北市信義區忠孝東路五段510號21樓",
+                                "email": "van@js-adways.com.tw",
+                                "job_title": "財務長",
+                                "job_title_en": "CFO",
+                                "start_date": "2006-01-01  00:00:00",
+                                "emergency_contact": [
+                                    {
+                                        "db_id": 2,
+                                        "name": "緊急聯絡人",
+                                        "phone_number": "0977289394",
+                                        "update_status": 0
+                                    }
+                                ],
+                                "department": [
+                                    {
+                                        "id": 1,
+                                        "start_date": "2006-01-01",
+                                        "end_date": null,
+                                        "update_status": 1
+                                    }
+                                ],
+                                "group": {
+                                    "create": [
+                                        1,
+                                        2
+                                    ],
+                                    "delete": [
+                                        4,
+                                        5
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "請求成功",
+                        "headers": {
+                            "test": {
+                                "description": "Employee request ID",
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": 200,
+                                    "message": "成功"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
                     }
                 },
                 "security": [

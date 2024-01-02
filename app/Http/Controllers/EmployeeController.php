@@ -213,4 +213,95 @@ class EmployeeController extends Controller
     {
 
     }
+
+    /**
+     * @OA\Patch (
+     *     path="/employee/{employeeId}",
+     *     tags={"Employee"},
+     *     summary="更新員工資料",
+     *     description="更新員工資料包含部門,權限群組,緊急聯絡人",
+     *     security={
+     *         {
+     *              "Authorization": {}
+     *         }
+     *      },
+     *      @OA\RequestBody (
+     *           required = true,
+     *           @OA\JsonContent(
+     *               required = {"username","password"},
+     *               example={
+     *                   "employee_id": 2,
+     *                   "employee_no": "A0002",
+     *                   "name": "財務長",
+     *                   "name_en": "Van",
+     *                   "birthday": "1977-09-03",
+     *                   "gender": 1,
+     *                   "id_number": "A188888888",
+     *                   "phone_number": "0977895561",
+     *                   "address": "110台北市信義區忠孝東路五段510號21樓",
+     *                   "email": "van@js-adways.com.tw",
+     *                   "job_title": "財務長",
+     *                   "job_title_en": "CFO",
+     *                   "start_date": "2006-01-01  00:00:00",
+     *                   "emergency_contact": {
+     *                   {
+     *                   "db_id": 2,
+     *                   "name": "緊急聯絡人",
+     *                   "phone_number": "0977289394",
+     *                   "update_status": 0
+     *                   }
+     *                   },
+     *                   "department": {
+     *                   {
+     *                   "id": 1,
+     *                   "start_date": "2006-01-01",
+     *                   "end_date": null,
+     *                   "update_status": 1
+     *                   }
+     *                   },
+     *                   "group": {
+     *                   "create": {
+     *                   1,
+     *                   2
+     *                   },
+     *                   "delete": {
+     *                   4,
+     *                   5
+     *                   }
+     *                   }
+     *                   }
+     *           )
+     *       ),
+     *      @OA\Response (
+     *           response=200,
+     *           description="請求成功",
+     *           @OA\Header(
+     *               header="test",
+     *               description="Employee request ID",
+     *              @OA\Schema(
+     *                  type="integer",
+     *                  format="int64"
+     *                  )
+     *           ),
+     *           @OA\JsonContent(
+     *              example={
+     *                  "status":200,
+     *                  "message":"成功"
+     *              }
+     *            ),
+     *      ),
+     *     @OA\Response (
+     *          response=400,
+     *          ref="#/components/responses/400",
+     *     ),
+     *     @OA\Response (
+     *          response=401,
+     *          ref="#/components/responses/401",
+     *     )
+     * )
+     */
+    public function edit_employee()
+    {
+
+    }
 }
