@@ -60,7 +60,35 @@ class EmployeeController extends Controller
      */
     public function login()
     {
+       /**
+        1.input->前端 將帳號密碼加密 組成一組 key
+        encrypt_key = request->key
 
+        2.把key 解密->獲取員工帳號密碼
+        decrypt_key = decrypt(encrypt_key)
+
+        3.if解密成功用得到的帳號 去資料庫比對 where email = `帳號`
+        employee = select * form employee where email = `帳號`
+
+        4.if有此員工->進行密碼驗證hash_check
+        if(employee){
+            hash_check(employee->password)
+        }
+
+        5.else沒有此員工->回傳message:沒有找到此員工
+
+        6.if密碼驗證成功->登入成功->生成jwt_token
+
+        7.將jwt_token 存起來 作之後其他子系統需要驗證的時候用
+
+        8.並且整理此員工可以使用的子系統->system
+
+        9.密碼驗證失敗->回傳錯誤訊息:帳號或密碼錯誤
+
+        10.output->status:200,
+        data:{
+        token:'jwt token', system:[{},{}],}
+       */
     }
 
     /**

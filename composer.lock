@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46e109b775fd6b9fa36cc1c1ef0fe54f",
+    "content-hash": "11b5b60407a1a50309b64f9b60f92f6b",
     "packages": [
         {
             "name": "brick/math",
@@ -1270,16 +1270,16 @@
         },
         {
             "name": "jsadways/scopefilter",
-            "version": "0.1.6",
+            "version": "0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JsAdways/scopeFilter.git",
-                "reference": "60798da99dfbb3ec31d26f7da3da3038e2546c5c"
+                "reference": "7f9a127a6ddea097b12eaf1c906d96ee15972d28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JsAdways/scopeFilter/zipball/60798da99dfbb3ec31d26f7da3da3038e2546c5c",
-                "reference": "60798da99dfbb3ec31d26f7da3da3038e2546c5c",
+                "url": "https://api.github.com/repos/JsAdways/scopeFilter/zipball/7f9a127a6ddea097b12eaf1c906d96ee15972d28",
+                "reference": "7f9a127a6ddea097b12eaf1c906d96ee15972d28",
                 "shasum": ""
             },
             "type": "library",
@@ -1297,9 +1297,9 @@
             ],
             "support": {
                 "issues": "https://github.com/JsAdways/scopeFilter/issues",
-                "source": "https://github.com/JsAdways/scopeFilter/tree/0.1.6"
+                "source": "https://github.com/JsAdways/scopeFilter/tree/0.1.7"
             },
-            "time": "2023-12-29T07:27:59+00:00"
+            "time": "2024-01-03T07:10:42+00:00"
         },
         {
             "name": "laravel/framework",
