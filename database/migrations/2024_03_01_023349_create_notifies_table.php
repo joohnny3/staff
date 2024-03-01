@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('subject', 100)->comment('主旨');
             $table->longText('content')->comment('內文 Json:Object');
             $table->string('template', 24)->comment('模板 blade:檔案名稱');
-            $table->tinyInteger('service')->comment('通知服務');
+            $table->tinyInteger('service')->comment('通知服務  1:Gmail 2:Line 3:Jandi 4:Slack');
             $table->longText('attachment')->nullable()->comment('附件 JsonString:array');
             $table->longText('extra')->nullable()->comment('其他');
-            $table->dateTime('sent_time')->nullable()->comment('發送時間 null:通知尚未發送');
+            $table->dateTime('sent_time')->nullable()->default(null)->comment('發送時間 null:通知尚未發送');
 
             $table->timestamps();
         });

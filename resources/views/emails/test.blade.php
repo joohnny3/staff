@@ -37,8 +37,8 @@
 </head>
 <body>
 <h1>測試信件</h1>
-<p>寄件人{{ $param }}</p>
-<p>這是一封主管 {{ $param }}發送的測試郵件，其中包含一個簡單的表格</p>
+<p>寄件人 {{ $content->name }} </p>
+<p>這是一封主管發送的測試郵件，其中包含一個簡單的表格</p>
 <table>
     <thead>
     <tr>
@@ -51,7 +51,7 @@
     <tbody>
     <tr>
         <td>1</td>
-        <td>154-1113</td>
+        <td>{{ $content->phone }}</td>
         <td>豐富產品</td>
         <td>UNICORN</td>
     </tr>

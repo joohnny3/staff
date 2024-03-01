@@ -14,14 +14,11 @@ class TestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $param;
-
     /**
      * Create a new message instance.
      */
-    public function __construct($param)
+    public function __construct(public $param)
     {
-        $this->param = $param;
     }
 
 
