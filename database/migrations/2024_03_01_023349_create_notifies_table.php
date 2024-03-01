@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('notify', function (Blueprint $table) {
             $table->id();
 
-            $table->string('recipient', 24)->comment('收件者名稱');
-            $table->text('email')->nullable()->comment('電子信箱');
-            $table->longText('carbon_copy')->nullable()->comment('副本');
-            $table->longText('blind_carbon_copy')->nullable()->comment('秘密附件');
+            $table->string('recipient', 24)->comment('接收方');
+            $table->text('email')->nullable()->comment('電子郵件');
+            $table->longText('carbon_copy')->nullable()->comment('副本 JsonString:array');
+            $table->longText('blind_carbon_copy')->nullable()->comment('密件副本 JsonString:array');
             $table->string('subject', 100)->comment('主旨');
-            $table->longText('content')->comment('內文');
-            $table->string('template', 24)->comment('模板');
-            $table->tinyInteger('service')->comment('服務 1:Gmail 2:Line 3:Jandi 4:Slack ');
-            $table->longText('attachment')->nullable()->comment('附件');
+            $table->longText('content')->comment('內文 Json:Object');
+            $table->string('template', 24)->comment('模板 blade:檔案名稱');
+            $table->tinyInteger('service')->comment('通知服務');
+            $table->longText('attachment')->nullable()->comment('附件 JsonString:array');
             $table->longText('extra')->nullable()->comment('其他');
             $table->dateTime('sent_time')->nullable()->comment('發送時間 null:通知尚未發送');
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notify');
+        Schema::dropIfExists('notifies');
     }
 };
