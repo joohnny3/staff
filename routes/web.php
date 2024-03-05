@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\BoardController;
-use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 

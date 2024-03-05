@@ -8,6 +8,7 @@ use App\Services\Notify\NotifyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class NotifyController extends Controller
@@ -68,7 +69,7 @@ class NotifyController extends Controller
 
                 $notify->update(['sent_time' => now()]);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sending mail for Notify ID ' . $notify->id . ': ' . $e->getMessage());
         }
     }
