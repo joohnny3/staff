@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->longText('attachment')->nullable()->comment('附件 JsonString:array');
             $table->tinyInteger('status')->default(0)->comment('-1:失敗 0:未發送 1:成功');
             $table->longText('extra')->nullable()->comment('其他');
-            $table->dateTime('sent_time')->nullable()->default(null)->comment('發送時間');
 
             $table->timestamps();
         });
