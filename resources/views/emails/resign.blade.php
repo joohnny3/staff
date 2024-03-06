@@ -9,7 +9,7 @@
             font-size: 10pt;
         }
         table {
-            width: 100%;
+            width: 35%;
             border-collapse: collapse;
         }
         th, td {
@@ -25,8 +25,12 @@
         }
         .last-working-day {
             background-color: #FCE4D6;
+            font-weight: bold;
         }
-        .signature {
+        .last-working-day.note-present {
+            color: red;
+        }
+        .sign {
             margin-top: 20px;
         }
     </style>
@@ -48,21 +52,22 @@
     </tr>
     </thead>
     <tbody>
-    @foreach ($resignations as $resignation)
+    @foreach ($content->resignations as $resignation)
         <tr>
             <td>{{ $resignation->employee_id }}</td>
             <td>{{ $resignation->name }}</td>
-            <td>{{ $resignation->english_name }}</td>
+            <td>{{ $resignation->name_en }}</td>
             <td>{{ $resignation->department }}</td>
             <td class="leave-date">{{ $resignation->resignation_date }}</td>
-            <td class="last-working-day">{{ $resignation->last_working_day }}</td>
+            <td class="{{ $resignation->note ? 'last-working-day note-present' : 'last-working-day' }}">
+                {{ $resignation->last_working_day }}</td>
             <td>{{ $resignation->note }}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
-<div class="signature">
+<div class="sign">
     <p>--</p>
     <p>Best Regards,</p>
     <p>JS-Adways HR</p>

@@ -40,10 +40,9 @@ class SendScheduledEmails extends Command
                 $notify->update(['status' => 1]);
             } catch (Exception $e) {
                 $notify->update(['status' => -1]);
-                Log::error('發送信件失敗
-                    Notify ID: ' . $notify->id .
-                    'message: ' . $e->getMessage() .
-                    'at line: ' . $e->getLine());
+                Log::error('發送信件失敗 Notify ID:' . $notify->id .
+                    ', message:' . $e->getMessage() .
+                    ', at line: ' . $e->getLine());
 
             }
         }

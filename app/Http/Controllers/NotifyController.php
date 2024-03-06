@@ -22,7 +22,7 @@ class NotifyController extends Controller
      *     description="
      *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'
      *      通知服務類型 1:Gmail, 2:Line, 3:Jandi, 4:Slack
-     *      Gmail template 可選值: 'exchange_rate', 'resigning'",
+     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'",
      *     security={
      *         {
      *              "Authorization": {}
@@ -96,7 +96,7 @@ class NotifyController extends Controller
                 'blind_carbon_copy' => 'sometimes|string|nullable',
                 'subject' => 'required|string|max:50',
                 'content' => 'required|json',
-                'template' => 'required|string|max:20|in:exchange_rate,resigning,social_media_case',
+                'template' => 'required|string|max:20|in:exchange_rate,resign,social_media_case',
                 'attachment' => 'sometimes|string|nullable',
                 'service' => 'required|int|max:10|in:1,2,3,4'
             ]);
@@ -105,7 +105,7 @@ class NotifyController extends Controller
             $template_parameter = [
                 'exchange_rate' => 2,
                 'social_media_case' => 2,
-                'resigning' => 1,
+                'resign' => 1,
             ];
 
             $content_array = json_decode($data['content'] ?? '[]', true);
