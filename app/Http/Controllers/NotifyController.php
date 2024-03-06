@@ -96,7 +96,7 @@ class NotifyController extends Controller
                 'blind_carbon_copy' => 'sometimes|string|nullable',
                 'subject' => 'required|string|max:50',
                 'content' => 'required|json',
-                'template' => 'required|string|max:20|in:exchange_rate,resigning',
+                'template' => 'required|string|max:20|in:exchange_rate,resigning,social_media_case',
                 'attachment' => 'sometimes|string|nullable',
                 'service' => 'required|int|max:10|in:1,2,3,4'
             ]);
@@ -104,7 +104,8 @@ class NotifyController extends Controller
             //檢查模板參數與內文參數是否相同
             $template_parameter = [
                 'exchange_rate' => 2,
-                'resigning' => 3,
+                'social_media_case' => 2,
+                'resigning' => 1,
             ];
 
             $content_array = json_decode($data['content'] ?? '[]', true);
