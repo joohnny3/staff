@@ -16,7 +16,7 @@ class NotifyController extends Controller
 
     /**
      * @OA\Post (
-     *     path="/delivery_notify",
+     *     path="/notify",
      *     tags={"Notify"},
      *     summary="新增通知訊息",
      *     description="

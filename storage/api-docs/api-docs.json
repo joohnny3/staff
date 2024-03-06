@@ -24,14 +24,14 @@
     ],
     "paths": {
         "/": {},
-        "/delivery_notify": {
+        "/notify": {
             "post": {
                 "tags": [
                     "Notify"
                 ],
                 "summary": "新增通知訊息",
                 "description": "\n     *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'\n     *      通知服務類型 1:Gmail, 2:Line, 3:Jandi, 4:Slack\n     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'",
-                "operationId": "b083ff117d7e7c07f5777a72ad4c82c8",
+                "operationId": "59680b320ea59c5a7aa0d3cdb1be556e",
                 "requestBody": {
                     "required": true,
                     "content": {
