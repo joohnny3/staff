@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Notify\NotifyService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 
@@ -107,10 +108,9 @@ class NotifyController extends Controller
 
             $content_array = json_decode($data['content'] ?? '[]', true);
             if (count($content_array) != $template_parameter[$data['template']]) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "content 參數與 {$data['template']} template 所需的參數不符。",
-                ], 400);
+                throw ValidationException::withMessages([
+                    'message' => "content 參數與 {$data['template']} template 所需的參數不符"
+                ]);
             }
 
             $result = $this->NotifyService->add($data);
