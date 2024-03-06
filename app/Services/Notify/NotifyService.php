@@ -12,9 +12,4 @@ class NotifyService extends Service
     {
         return $this->repository('NotifyRepository')->create($data);
     }
-
-    public function send()
-    {
-
-    }
 }

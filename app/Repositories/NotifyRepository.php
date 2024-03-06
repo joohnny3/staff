@@ -10,13 +10,20 @@ use App\Models\Notify;
 
 class NotifyRepository
 {
+    /**
+     * 新增通知內容格式
+     *
+     * @param array $data
+     * @return Model
+     * @throws Exception
+     */
     public function create(array $data): Model
     {
         try {
             DB::beginTransaction();
 
             $notify = Notify::create([
-                'recipient' => $data['recipient'],
+                'recipient_name' => $data['recipient_name'],
                 'email' => $data['email'] ?? null,
                 'carbon_copy' => $data['carbon_copy'] ?? null,
                 'blind_carbon_copy' => $data['blind_carbon_copy'] ?? null,
@@ -29,9 +36,9 @@ class NotifyRepository
 
             DB::commit();
             return $notify;
-        } catch (Throwable $t) {
+        } catch (Exception $t) {
             DB::rollBack();
-            throw new Exception($t->getMessage());
+            throw new Exception('Repository: ' . $t->getMessage());
         }
     }
 }

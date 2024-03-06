@@ -2,40 +2,50 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\TestMail;
-use App\Models\EmailJob;
+use App\Mail\MailNotify;
+use App\Models\Notify;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Exception;
 
 class SendScheduledEmails extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'email:send-scheduled';
+    protected $signature = 'email:send-emails';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Send scheduled emails';
+    protected $description = 'Send emails';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function handle(): void
     {
-        $emailJobs = EmailJob::where('status', 0)->get();
+        $notifies = Notify::where('status', 0)->get();
 
-        foreach ($emailJobs as $job) {
-            Mail::to($job->email)->send(new TestMail($job->param));
-            $job->update(['status' => 1]);
+        foreach ($notifies as $notify) {
+            $carbonCopy = json_decode($notify->carbon_copy, true);
+            $blindCarbonCopy = json_decode($notify->blind_carbon_copy, true);
+            $attachment = json_decode($notify->attachment, true);
+            $content = json_decode($notify->content);
+
+            try {
+                Mail::to($notify->email)
+                    ->send(new MailNotify(
+                        $notify->recipient,
+                        $carbonCopy,
+                        $blindCarbonCopy,
+                        $notify->subject,
+                        $content,
+                        $notify->template,
+                        $attachment
+                    ));
+
+                $notify->update(['status' => 1]);
+            } catch (Exception $e) {
+                $notify->update(['status' => -1]);
+                Log::error('發送信件失敗
+                    Notify ID: ' . $notify->id .
+                    'message: ' . $e->getMessage() .
+                    'at line: ' . $e->getLine());
+
+            }
         }
-
-        $this->info('Scheduled emails sent successfully');
     }
-
 }

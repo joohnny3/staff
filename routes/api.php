@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 /** 通知中心 */
-Route::post('/notify', [NotifyController::class, 'add']);
+Route::post('/delivery_notify', [NotifyController::class, 'add']);
 Route::post('/send_notify', [NotifyController::class, 'send']);
 /** END通知中心 */

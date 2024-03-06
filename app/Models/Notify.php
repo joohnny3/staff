@@ -12,7 +12,7 @@ class Notify extends Model
     protected $table = 'notify';
 
     protected $fillable = [
-        'recipient',
+        'recipient_name',
         'email',
         'carbon_copy',
         'blind_carbon_copy',
@@ -21,6 +21,7 @@ class Notify extends Model
         'template',
         'service',
         'attachment',
-        'sent_time'
+        'sent_time',
+        'status'
     ];
 }
