@@ -23,7 +23,7 @@ class NotifyController extends Controller
                 'carbon_copy' => 'sometimes|string|nullable',
                 'blind_carbon_copy' => 'sometimes|string|nullable',
                 'subject' => 'required|string|max:50',
-                'content' => 'required|string',
+                'content' => 'required|json',
                 'template' => 'required|string|max:20|in:exchange_rate,resigning',
                 'attachment' => 'sometimes|string|nullable',
             ]);
