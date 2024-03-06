@@ -19,7 +19,7 @@ class NotifyController extends Controller
         try {
             $data = $request->validate([
                 'recipient_name' => 'required|string|max:15',
-                'email' => 'sometimes|string|email|max:100',
+                'email' => 'required|string|email|max:100',
                 'carbon_copy' => 'sometimes|string|nullable',
                 'blind_carbon_copy' => 'sometimes|string|nullable',
                 'subject' => 'required|string|max:50',
@@ -28,6 +28,7 @@ class NotifyController extends Controller
                 'attachment' => 'sometimes|string|nullable',
             ]);
 
+            //檢查模板參數與內文參數是否相同
             $template_parameter = [
                 'exchange_rate' => 2,
                 'resigning' => 3,

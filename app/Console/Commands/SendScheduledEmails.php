@@ -17,7 +17,7 @@ class SendScheduledEmails extends Command
 
     public function handle(): void
     {
-        $notifies = Notify::where('status', 0)->get();
+        $notifies = Notify::where('status', 0)->where('service', 1)->get();
 
         foreach ($notifies as $notify) {
             $carbonCopy = json_decode($notify->carbon_copy, true);
