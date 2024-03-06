@@ -98,6 +98,7 @@ class NotifyController extends Controller
                 'content' => 'required|json',
                 'template' => 'required|string|max:20|in:exchange_rate,resigning',
                 'attachment' => 'sometimes|string|nullable',
+                'service' => 'required|int|max:10|in:1,2,3,4'
             ]);
 
             //檢查模板參數與內文參數是否相同

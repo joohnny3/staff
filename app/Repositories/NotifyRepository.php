@@ -30,7 +30,7 @@ class NotifyRepository
                 'subject' => $data['subject'],
                 'content' => $data['content'],
                 'template' => $data['template'],
-                'service' => 1,
+                'service' => $data['service'],
                 'attachment' => $data['attachment'] ?? null,
             ]);
 
