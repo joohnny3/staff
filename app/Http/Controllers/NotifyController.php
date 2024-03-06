@@ -13,7 +13,78 @@ class NotifyController extends Controller
     {
     }
 
-
+    /**
+     * @OA\Post (
+     *     path="/delivery_notify",
+     *     tags={"Notify"},
+     *     summary="新增通知訊息",
+     *     description="
+     *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'
+     *      通知服務類型 1:Gmail, 2:Line, 3:Jandi, 4:Slack
+     *      Gmail template 可選值: 'exchange_rate', 'resigning'",
+     *     security={
+     *         {
+     *              "Authorization": {}
+     *         }
+     *      },
+     *      @OA\RequestBody (
+     *           required = true,
+     *           @OA\JsonContent(
+     *               required = {"username","password"},
+     *               example={
+     *                   "recipient_name": "張育誠",
+     *                   "email": "theyouchman@gmail.com",
+     *                   "carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
+     *                   "blind_carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
+     *                   "subject": "台灣銀行2024年02月份平均匯率表",
+     *                   "template": "exchange_rate",
+     *                   "content": {"year":"2024","month":"02"},
+     *                   "attachment": {"2024ExchangeRate-每月一號提供.xlsx"},
+     *                   "service": 1,
+     *                   },
+     *           )
+     *       ),
+     *      @OA\Response (
+     *           response=200,
+     *           description="請求成功",
+     *           @OA\Header(
+     *               header="test",
+     *               description="Employee request ID",
+     *              @OA\Schema(
+     *                  type="integer",
+     *                  format="int64"
+     *                  )
+     *           ),
+     *           @OA\JsonContent(
+     *                example={
+     *                  "success": true,
+     *                  "data": {
+     *                      "recipient_name": "張育誠",
+     *                      "email": "theyouchman@gmail.com",
+     *                      "carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
+     *                      "blind_carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
+     *                      "subject": "台灣銀行2024年02月份平均匯率表",
+     *                      "template": "exchange_rate",
+     *                      "content": {"year":"2024","month":"02"},
+     *                      "service": 1,
+     *                  }
+     *                  }
+     *            ),
+     *      ),
+     *     @OA\Response (
+     *          response=400,
+     *          ref="#/components/responses/400",
+     *     ),
+     *     @OA\Response (
+     *          response=401,
+     *          ref="#/components/responses/401",
+     *     ),
+     *     @OA\Response (
+     *          response=500,
+     *          ref="#/components/responses/500",
+     *     )
+     * )
+     */
     public function add(Request $request)
     {
         try {

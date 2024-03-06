@@ -10,8 +10,8 @@ use Illuminate\Routing\Controller as BaseController;
 /**
  * @OA\Info(
  *      version="1.0.0",
- *      title="Employee ",
- *      description="Employee description",
+ *      title="Notify Center",
+ *      description="通知中心 api description",
  *      @OA\Contact(
  *          email="developer@example.com"
  *      ),
@@ -24,8 +24,8 @@ use Illuminate\Routing\Controller as BaseController;
  *      path="/"
  *  )
  * * @OA\server(
- *      url = "https://api-host.dev.app",
- *      description="測試區主機"
+ *      url = "http://127.0.0.1/staff/api",
+ *      description="測試區"
  * )
  * @OA\server(
  *      url = "http://localhost/XXXXX",
@@ -88,7 +88,16 @@ use Illuminate\Routing\Controller as BaseController;
  *              }
  *          ),
  *     ),
- *
+ *     @OA\Response(
+ *           response="500",
+ *           description="伺服器發生錯誤",
+ *           @OA\JsonContent(
+ *               example={
+ *                   "status":500,
+ *                   "message":"伺服器發生錯誤",
+ *               }
+ *           ),
+ *      ),
  * )
  */
 class Controller extends BaseController

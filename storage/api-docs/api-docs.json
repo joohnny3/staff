@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Employee ",
-        "description": "Employee description",
+        "title": "Notify Center",
+        "description": "通知中心 api description",
         "contact": {
             "email": "developer@example.com"
         },
@@ -14,8 +14,8 @@
     },
     "servers": [
         {
-            "url": "https://api-host.dev.app",
-            "description": "測試區主機"
+            "url": "http://127.0.0.1/staff/api",
+            "description": "測試區"
         },
         {
             "url": "http://localhost/XXXXX",
@@ -460,6 +460,106 @@
                     }
                 ]
             }
+        },
+        "/delivery_notify": {
+            "post": {
+                "tags": [
+                    "Notify"
+                ],
+                "summary": "新增通知訊息",
+                "description": "\n     *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'\n     *      通知服務類型 1:Gmail, 2:Line, 3:Jandi, 4:Slack\n     *      Gmail template 可選值: 'exchange_rate', 'resigning'",
+                "operationId": "b083ff117d7e7c07f5777a72ad4c82c8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ]
+                            },
+                            "example": {
+                                "recipient_name": "張育誠",
+                                "email": "theyouchman@gmail.com",
+                                "carbon_copy": [
+                                    "johnny31258@gmail",
+                                    "johnny.chang@js-adways.com.tw"
+                                ],
+                                "blind_carbon_copy": [
+                                    "johnny31258@gmail",
+                                    "johnny.chang@js-adways.com.tw"
+                                ],
+                                "subject": "台灣銀行2024年02月份平均匯率表",
+                                "template": "exchange_rate",
+                                "content": {
+                                    "year": "2024",
+                                    "month": "02"
+                                },
+                                "attachment": [
+                                    "2024ExchangeRate-每月一號提供.xlsx"
+                                ],
+                                "service": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "請求成功",
+                        "headers": {
+                            "test": {
+                                "description": "Employee request ID",
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "recipient_name": "張育誠",
+                                        "email": "theyouchman@gmail.com",
+                                        "carbon_copy": [
+                                            "johnny31258@gmail",
+                                            "johnny.chang@js-adways.com.tw"
+                                        ],
+                                        "blind_carbon_copy": [
+                                            "johnny31258@gmail",
+                                            "johnny.chang@js-adways.com.tw"
+                                        ],
+                                        "subject": "台灣銀行2024年02月份平均匯率表",
+                                        "template": "exchange_rate",
+                                        "content": {
+                                            "year": "2024",
+                                            "month": "02"
+                                        },
+                                        "service": 1
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -520,6 +620,18 @@
                         "example": {
                             "status": 405,
                             "message": "Method Not Allowed"
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "伺服器發生錯誤",
+                "content": {
+                    "application/json": {
+                        "schema": {},
+                        "example": {
+                            "status": 500,
+                            "message": "伺服器發生錯誤"
                         }
                     }
                 }
