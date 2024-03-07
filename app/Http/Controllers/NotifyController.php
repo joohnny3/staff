@@ -21,8 +21,22 @@ class NotifyController extends Controller
      *     summary="新增通知訊息",
      *     description="
      *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'
-     *      通知服務類型 1:Gmail, 2:Line, 3:Jandi, 4:Slack
-     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'",
+     *
+     *      通知服務類型 可選值: 1:Gmail, 2:Line, 3:Jandi, 4:Slack
+     *
+     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'
+     *
+     *      template content範例如下 ↓ ↓ ↓
+     *
+     *      exchange_rate: {'year':'2024','month':'02'}
+     *
+     *      resig: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},
+     *                              {'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''}]}
+     *
+     *      social_media_case: {'month': '03','cases': ['黑橋牌年節活動貼文 一週吸引超過3,000人參與',
+     *                                                  'Richart LINE OA推播訊息透過創意包裝互動成長3.7倍',
+     *                                                  '報獎得獎率100%！金銀銅佳作全拿下！']}
+     *     ",
      *     security={
      *         {
      *              "Authorization": {}
@@ -92,24 +106,29 @@ class NotifyController extends Controller
             $data = $request->validate([
                 'recipient_name' => 'required|string|max:15',
                 'email' => 'required|string|email|max:100',
-                'carbon_copy' => 'sometimes|string|nullable',
-                'blind_carbon_copy' => 'sometimes|string|nullable',
+                'carbon_copy' => 'sometimes|array|nullable',
+                'carbon_copy.*' => 'sometimes|string|email',
+                'blind_carbon_copy' => 'sometimes|array|nullable',
+                'blind_carbon_copy.*' => 'sometimes|string|email',
                 'subject' => 'required|string|max:50',
-                'content' => 'required|json',
+                'content' => 'required',
                 'template' => 'required|string|max:20|in:exchange_rate,resign,social_media_case',
-                'attachment' => 'sometimes|string|nullable',
+                'attachment' => 'sometimes|array|nullable',
+                'attachment.*' => 'sometimes|string|regex:/\.[a-zA-Z0-9]+$/',
                 'service' => 'required|int|max:10|in:1,2,3,4'
             ]);
 
-            //檢查模板參數與內文參數是否相同
+            //檢查模板參數與內文參數是否一致
             $template_parameter = [
-                'exchange_rate' => 2,
-                'social_media_case' => 2,
-                'resign' => 1,
+                'exchange_rate' => ['year', 'month'],
+                'social_media_case' => ['month', 'cases'],
+                'resign' => ['resignations'],
             ];
 
-            $content_array = json_decode($data['content'] ?? '[]', true);
-            if (count($content_array) != $template_parameter[$data['template']]) {
+            $template_diff = array_diff($template_parameter[$data['template']], array_keys($data['content']));
+            $content_diff = array_diff(array_keys($data['content']), $template_parameter[$data['template']]);
+
+            if (!empty($template_diff) || !empty($content_diff)) {
                 throw ValidationException::withMessages([
                     'message' => "content 參數與 {$data['template']} template 所需的參數不符"
                 ]);

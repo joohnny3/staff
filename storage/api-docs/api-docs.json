@@ -30,7 +30,7 @@
                     "Notify"
                 ],
                 "summary": "新增通知訊息",
-                "description": "\n     *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'\n     *      通知服務類型 1:Gmail, 2:Line, 3:Jandi, 4:Slack\n     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'",
+                "description": "\n     *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'\n     *\n     *      通知服務類型 可選值: 1:Gmail, 2:Line, 3:Jandi, 4:Slack\n     *\n     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'\n     *\n     *      template content範例如下 ↓ ↓ ↓\n     *\n     *      exchange_rate: {'year':'2024','month':'02'}\n     *\n     *      resig: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},\n     *                              {'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''}]}\n     *\n     *      social_media_case: {'month': '03','cases': ['黑橋牌年節活動貼文 一週吸引超過3,000人參與',\n     *                                                  'Richart LINE OA推播訊息透過創意包裝互動成長3.7倍',\n     *                                                  '報獎得獎率100%！金銀銅佳作全拿下！']}\n     *     ",
                 "operationId": "59680b320ea59c5a7aa0d3cdb1be556e",
                 "requestBody": {
                     "required": true,

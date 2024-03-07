@@ -25,13 +25,13 @@ class NotifyRepository
             $notify = Notify::create([
                 'recipient_name' => $data['recipient_name'],
                 'email' => $data['email'] ?? null,
-                'carbon_copy' => $data['carbon_copy'] ?? null,
-                'blind_carbon_copy' => $data['blind_carbon_copy'] ?? null,
+                'carbon_copy' => json_encode($data['carbon_copy']) ?? null,
+                'blind_carbon_copy' => json_encode($data['blind_carbon_copy']) ?? null,
                 'subject' => $data['subject'],
-                'content' => $data['content'],
+                'content' => json_encode($data['content']),
                 'template' => $data['template'],
                 'service' => $data['service'],
-                'attachment' => $data['attachment'] ?? null,
+                'attachment' => json_encode($data['attachment']) ?? null,
             ]);
 
             DB::commit();
