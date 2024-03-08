@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Notify\NotifyService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 
@@ -19,28 +20,28 @@ class NotifyController extends Controller
      *     tags={"Notify"},
      *     summary="創建通知訊息",
      *     description="
-必填欄位: recipient_name, subject, content
+    必填欄位: recipient_name, subject, content
 
-{service} 服務種類可選: gmail, line, jandi, slack ☞(擇一)
+    {service} 服務種類可選: gmail, line, jandi, slack ☞(擇一)
 
-目前 gmail {type} 有以下幾種通知情形可選: 1.exchange_rate(台灣銀行平均匯率通知), 2.social_media_case(最新社群案例通知), 3.resign(員工離退通知) ☞(擇一)
+    目前 gmail {type} 有以下幾種通知情形可選: 1.exchange_rate(台灣銀行平均匯率通知), 2.social_media_case(最新社群案例通知), 3.resign(員工離退通知) ☞(擇一)
 
-各種通知信件內文(content)所需參數如下 ▾
+    各種通知信件內文(content)所需參數如下 ▾
 
-exchange_rate: {'year':'2024','month':'02'}
+    exchange_rate: {'year':'2024','month':'02'}
 
     year:匯率表年份 ⎜month:匯率表月份
 
-social_media_case: {'month':'03','cases':['案例標題',...]}
+    social_media_case: {'month':'03','cases':['案例標題',...]}
 
     month:分享案例當下月份 ⎜cases:分享案例標題
 
-resign: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
+    resign: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
 
     resignations:離職員工名單 ⎜employee_id:員工編號 ⎜name:員工姓名 ⎜name_en:員工英文名字 ⎜department:員工所屬部門
-                            ⎜resignation_date:離職日期 ⎜last_working_day:最後工作日 ⎜note:備註
+    ⎜resignation_date:離職日期 ⎜last_working_day:最後工作日 ⎜note:備註
 
-",
+    ",
      *     security={
      *         {
      *              "Authorization": {}
@@ -104,6 +105,18 @@ resign: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'
     public function add(Request $request, string $service, ?string $template = null)
     {
         try {
+            if ($service == 'gmail' && $template == null) {
+                throw ValidationException::withMessages([
+                    'message' => "缺少{type},沒有輸入 gmail 通知情形"
+                ]);
+            }
+
+            if ($service != 'gmail' && $template != null) {
+                throw ValidationException::withMessages([
+                    'message' => "目前service,不適用此{type}"
+                ]);
+            }
+
             $template_rules = [
                 'exchange_rate' => [
                     'year' => 'required|string',
