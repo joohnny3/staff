@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\Notify\NotifyService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 
@@ -16,27 +15,32 @@ class NotifyController extends Controller
 
     /**
      * @OA\Post (
-     *     path="/notify",
+     *     path="/notify/{service}/{type?}",
      *     tags={"Notify"},
-     *     summary="新增通知訊息",
+     *     summary="創建通知訊息",
      *     description="
-     *      Required 必填值: 'recipient_name', 'email', 'subject', 'template', 'content', 'service'
-     *
-     *      通知服務類型 可選值: 1:Gmail, 2:Line, 3:Jandi, 4:Slack
-     *
-     *      Gmail template 可選值: 'exchange_rate', 'resig', 'social_media_case'
-     *
-     *      template content範例如下 ↓ ↓ ↓
-     *
-     *      exchange_rate: {'year':'2024','month':'02'}
-     *
-     *      resig: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},
-     *                              {'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''}]}
-     *
-     *      social_media_case: {'month': '03','cases': ['黑橋牌年節活動貼文 一週吸引超過3,000人參與',
-     *                                                  'Richart LINE OA推播訊息透過創意包裝互動成長3.7倍',
-     *                                                  '報獎得獎率100%！金銀銅佳作全拿下！']}
-     *     ",
+必填欄位: recipient_name, subject, content
+
+{service} 服務種類可選: gmail, line, jandi, slack ☞(擇一)
+
+目前 gmail {type} 有以下幾種通知情形可選: 1.exchange_rate(台灣銀行平均匯率通知), 2.social_media_case(最新社群案例通知), 3.resign(員工離退通知) ☞(擇一)
+
+各種通知信件內文(content)所需參數如下 ▾
+
+exchange_rate: {'year':'2024','month':'02'}
+
+    year:匯率表年份 ⎜month:匯率表月份
+
+social_media_case: {'month':'03','cases':['案例標題',...]}
+
+    month:分享案例當下月份 ⎜cases:分享案例標題
+
+resign: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
+
+    resignations:離職員工名單 ⎜employee_id:員工編號 ⎜name:員工姓名 ⎜name_en:員工英文名字 ⎜department:員工所屬部門
+                            ⎜resignation_date:離職日期 ⎜last_working_day:最後工作日 ⎜note:備註
+
+",
      *     security={
      *         {
      *              "Authorization": {}
@@ -52,10 +56,8 @@ class NotifyController extends Controller
      *                   "carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
      *                   "blind_carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
      *                   "subject": "台灣銀行2024年02月份平均匯率表",
-     *                   "template": "exchange_rate",
      *                   "content": {"year":"2024","month":"02"},
      *                   "attachment": {"2024ExchangeRate-每月一號提供.xlsx"},
-     *                   "service": 1,
      *                   },
      *           )
      *       ),
@@ -73,16 +75,15 @@ class NotifyController extends Controller
      *           @OA\JsonContent(
      *                example={
      *                  "success": true,
-     *                  "data": {
-     *                      "recipient_name": "張育誠",
+     *                  "message": "通知訊息創建成功",
+     *                  "details": {
+     *                      "recipient": "張育誠",
      *                      "email": "theyouchman@gmail.com",
-     *                      "carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
-     *                      "blind_carbon_copy": {"johnny31258@gmail","johnny.chang@js-adways.com.tw"},
      *                      "subject": "台灣銀行2024年02月份平均匯率表",
-     *                      "template": "exchange_rate",
-     *                      "content": {"year":"2024","month":"02"},
-     *                      "service": 1,
-     *                  }
+     *                      "service": "Gmail",
+     *                      "type": "exchange_rate",
+     *                      "sent_at": "2024-03-08 12:16:15"
+     *                      }
      *                  }
      *            ),
      *      ),
@@ -126,7 +127,7 @@ class NotifyController extends Controller
 
             $rules = [
                 'recipient_name' => 'required|string|max:15',
-                'email' => 'required|string|email|max:100',
+                'email' => 'sometimes|string|email|max:100',
                 'carbon_copy' => 'sometimes|array|nullable',
                 'carbon_copy.*' => 'sometimes|string|email',
                 'blind_carbon_copy' => 'sometimes|array|nullable',
@@ -149,7 +150,15 @@ class NotifyController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $result,
+                'message' => '通知訊息創建成功',
+                'details' => [
+                    'recipient' => $result->recipient_name,
+                    'email' => $result->email,
+                    'subject' => $result->subject,
+                    'service' => $result->service->name,
+                    'type' => $result->template,
+                    'sent_at' => $result->created_at->toDateTimeString(),
+                ],
             ], 201);
         } catch (Throwable $t) {
             Log::error('Error:' . $t->getMessage() . ' at line:' . $t->getLine());
