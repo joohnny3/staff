@@ -100,10 +100,31 @@ class NotifyController extends Controller
      *     )
      * )
      */
-    public function add(Request $request)
+    public function add(Request $request, string $service, ?string $template = null)
     {
         try {
-            $data = $request->validate([
+            $template_rules = [
+                'exchange_rate' => [
+                    'year' => 'required|string',
+                    'month' => 'required|string',
+                ],
+                'resign' => [
+                    'resignations' => 'required|array',
+                    'resignations.*.employee_id' => 'required|string',
+                    'resignations.*.name' => 'required|string',
+                    'resignations.*.name_en' => 'required|string',
+                    'resignations.*.department' => 'required|string',
+                    'resignations.*.resignation_date' => 'required|string',
+                    'resignations.*.last_working_day' => 'required|string',
+                    'resignations.*.note' => 'sometimes|string|nullable',
+                ],
+                'social_media_case' => [
+                    'month' => 'required|string',
+                    'cases' => 'required|array'
+                ],
+            ];
+
+            $rules = [
                 'recipient_name' => 'required|string|max:15',
                 'email' => 'required|string|email|max:100',
                 'carbon_copy' => 'sometimes|array|nullable',
@@ -111,30 +132,20 @@ class NotifyController extends Controller
                 'blind_carbon_copy' => 'sometimes|array|nullable',
                 'blind_carbon_copy.*' => 'sometimes|string|email',
                 'subject' => 'required|string|max:50',
-                'content' => 'required',
-                'template' => 'required|string|max:20|in:exchange_rate,resign,social_media_case',
+                'content' => 'required|array',
                 'attachment' => 'sometimes|array|nullable',
                 'attachment.*' => 'sometimes|string|regex:/\.[a-zA-Z0-9]+$/',
-                'service' => 'required|int|max:10|in:1,2,3,4'
-            ]);
-
-            //檢查模板參數與內文參數是否一致
-            $template_parameter = [
-                'exchange_rate' => ['year', 'month'],
-                'social_media_case' => ['month', 'cases'],
-                'resign' => ['resignations'],
             ];
 
-            $template_diff = array_diff($template_parameter[$data['template']], array_keys($data['content']));
-            $content_diff = array_diff(array_keys($data['content']), $template_parameter[$data['template']]);
-
-            if (!empty($template_diff) || !empty($content_diff)) {
-                throw ValidationException::withMessages([
-                    'message' => "content 參數與 {$data['template']} template 所需的參數不符"
-                ]);
+            if (isset($template_rules[$template])) {
+                foreach ($template_rules[$template] as $key => $rule) {
+                    $rules["content.$key"] = $rule;
+                }
             }
 
-            $result = $this->NotifyService->add($data);
+            $data = $request->validate($rules);
+
+            $result = $this->NotifyService->add($data, $service, $template);
 
             return response()->json([
                 'success' => true,
