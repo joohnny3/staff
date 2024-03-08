@@ -111,9 +111,9 @@ class NotifyController extends Controller
                 'resign' => [
                     'resignations' => 'required|array',
                     'resignations.*.employee_id' => 'required|string',
-                    'resignations.*.name' => 'required|string',
-                    'resignations.*.name_en' => 'required|string',
-                    'resignations.*.department' => 'required|string',
+                    'resignations.*.name' => 'required|string|max:20',
+                    'resignations.*.name_en' => 'required|string|max:50|regex:/^[A-Za-z0-9\.]*$/',
+                    'resignations.*.department' => 'required|string|max:30',
                     'resignations.*.resignation_date' => 'required|string',
                     'resignations.*.last_working_day' => 'required|string',
                     'resignations.*.note' => 'sometimes|string|nullable',
