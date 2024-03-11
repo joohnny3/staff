@@ -75,15 +75,15 @@ class NotifyController extends Controller
     各情境通知內文(content)所需參數
 
     exchange_rate:
-     * 範例: {'year':'2024','month':'02'}
+     * 範例: {'year':2024,'month':2}
      * 參數:     year       month
      * 說明:   匯率表年份   匯率表月份
      * 類型:    integer    integer
 
     social_media_case:
-     * 範例: {'month':'03','cases':['案例標題',...]}
+     * 範例: {'month':3,'cases':['案例標題',...]}
      * 參數:    month            cases
-     * 說明: 案例分享當前月份    案例分享標題
+     * 說明: 案例分享當前月份    社群案例標題
      * 類型:   integer           array
 
     resign:
