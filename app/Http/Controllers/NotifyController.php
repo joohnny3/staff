@@ -18,29 +18,79 @@ class NotifyController extends Controller
      * @OA\Post (
      *     path="/notify/{service}/{type?}",
      *     tags={"Notify"},
-     *     summary="創建通知訊息",
+     *     summary="新增通知訊息",
      *     description="
-    必填欄位: recipient_name, subject, content
+     Parameters 參數文件
 
-    {service} 服務種類可選: gmail, line, jandi, slack ☞(擇一)
+     service:
+     * 參數類型: string
+     * 參數說明: 通知服務類型
+     * 是否必傳: Y
+     * 注意事項: {service} 服務類型可選: gmail, line, jandi, slack
 
-    目前 gmail {type} 有以下幾種通知情形可選: 1.exchange_rate(台灣銀行平均匯率通知), 2.social_media_case(最新社群案例通知), 3.resign(員工離退通知) ☞(擇一)
+     type:
+     * 參數類型: string
+     * 參數說明: 通知情境類型
+     * 是否必傳: N
+     * 注意事項: 目前只開放 gmail {type} 有通知情境可選: 1.exchange_rate(台灣銀行平均匯率通知), 2.social_media_case(最新社群案例通知), 3.resign(員工離退通知)
 
-    各種通知信件內文(content)所需參數如下 ▾
+    recipient_name:
+     * 參數類型: string
+     * 參數說明: 接收人姓名
+     * 是否必填: Y
 
-    exchange_rate: {'year':'2024','month':'02'}
+    email:
+     * 參數類型: string
+     * 參數說明: 電子信箱
+     * 是否必填: N
 
-    year:匯率表年份 ⎜month:匯率表月份
+    carbon_copy:
+     * 參數類型: JsonString: array
+     * 參數說明: 副本
+     * 是否必填: N
 
-    social_media_case: {'month':'03','cases':['案例標題',...]}
+    blind_carbon_copy:
+     * 參數類型: JsonString: array
+     * 參數說明: 副本
+     * 是否必填: N
 
-    month:分享案例當下月份 ⎜cases:分享案例標題
+    subject:
+     * 參數類型: string
+     * 參數說明: 通知訊息主旨
+     * 是否必填: Y
 
-    resign: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
+    content:
+     * 參數類型: Json: Object
+     * 參數說明: 通知訊息內文
+     * 是否必填: Y
+     * 注意事項: 每種通知情境所需內文格式不同
 
-    resignations:離職員工名單 ⎜employee_id:員工編號 ⎜name:員工姓名 ⎜name_en:員工英文名字 ⎜department:員工所屬部門
-    ⎜resignation_date:離職日期 ⎜last_working_day:最後工作日 ⎜note:備註
+    attachment:
+     * 參數類型: JsonString: array
+     * 參數說明: 附件
+     * 是否必填: N
 
+---------------------------------------------
+
+    各情境通知內文(content)所需參數
+
+    exchange_rate:
+     * 範例: {'year':'2024','month':'02'}
+     * 參數:     year       month
+     * 說明:   匯率表年份   匯率表月份
+     * 類型:    string      string
+
+    social_media_case:
+     * 範例: {'month':'03','cases':['案例標題',...]}
+     * 參數:    month            cases
+     * 說明: 案例分享當前月份    案例分享標題
+     * 類型:   string            array
+
+    resign:
+     * 範例: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
+     * 參數:   employee_id     name      name_en     department     resignation_date    last_working_day    note
+     * 說明:     員工編號      員工姓名   員工英文名字    員工所屬部門          離職日期            最後工作日        備註
+     * 類型:     string       string     string        string             string             string        string
     ",
      *     security={
      *         {
