@@ -233,7 +233,7 @@ class NotifyController extends Controller
         }
     }
 
-    //    public function send()
+//        public function send()
 //    {
 //        try {
 //            $notifies = Notify::whereNull('sent_time')->get();

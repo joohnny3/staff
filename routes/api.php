@@ -23,5 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/notify/{notifyService}/{type?}', [NotifyController::class, 'add'])
     ->where('notifyService', 'gmail|line|jandi|slack')
     ->where('type', 'exchange_rate|resign|social_media_case');
-Route::post('/send_notify', [NotifyController::class, 'send']);
 /** END通知中心 */
