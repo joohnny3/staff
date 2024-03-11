@@ -78,19 +78,19 @@ class NotifyController extends Controller
      * 範例: {'year':'2024','month':'02'}
      * 參數:     year       month
      * 說明:   匯率表年份   匯率表月份
-     * 類型:    string      string
+     * 類型:    integer    integer
 
     social_media_case:
      * 範例: {'month':'03','cases':['案例標題',...]}
      * 參數:    month            cases
      * 說明: 案例分享當前月份    案例分享標題
-     * 類型:   string            array
+     * 類型:   integer           array
 
     resign:
      * 範例: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
      * 參數:   employee_id     name      name_en     department     resignation_date    last_working_day    note
      * 說明:     員工編號      員工姓名   員工英文名字    員工所屬部門          離職日期            最後工作日        備註
-     * 類型:     string       string     string        string             string             string        string
+     * 類型:     string       string     string        string              date               date         string
     ",
      *     security={
      *         {
@@ -169,8 +169,8 @@ class NotifyController extends Controller
 
             $template_rules = [
                 'exchange_rate' => [
-                    'year' => 'required|string',
-                    'month' => 'required|string',
+                    'year' => 'required|integer',
+                    'month' => 'required|integer',
                 ],
                 'resign' => [
                     'resignations' => 'required|array',
@@ -178,12 +178,12 @@ class NotifyController extends Controller
                     'resignations.*.name' => 'required|string|max:20',
                     'resignations.*.name_en' => 'required|string|max:50|regex:/^[A-Za-z0-9\.]*$/',
                     'resignations.*.department' => 'required|string|max:30',
-                    'resignations.*.resignation_date' => 'required|string',
-                    'resignations.*.last_working_day' => 'required|string',
+                    'resignations.*.resignation_date' => 'required|date',
+                    'resignations.*.last_working_day' => 'required|date',
                     'resignations.*.note' => 'sometimes|string|nullable',
                 ],
                 'social_media_case' => [
-                    'month' => 'required|string',
+                    'month' => 'required|integer',
                     'cases' => 'required|array'
                 ],
             ];
