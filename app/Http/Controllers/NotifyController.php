@@ -33,7 +33,7 @@ class NotifyController extends Controller
      * 參數說明: 通知情境類型
      * 是否必傳: Y
      * 注意事項: 每個通知服務開放情境如下
-    - gmail: exchange_rate(台灣銀行平均匯率通知), social_media_case(最新社群案例通知), resign(員工離退通知)
+    - gmail: exchange_rate(台灣銀行平均匯率通知), social_media_case(最新社群案例通知), resign(員工離退通知), invoice(電子發票開立通知)
     - line:  尚未開放
     - jandi: 尚未開放
     - slack: 尚未開放
@@ -74,7 +74,7 @@ class NotifyController extends Controller
      * 參數說明: 附件
      * 是否必填: N
 
-    ---------------------------------------------
+---------------------------------------------------
 
     每個通知情境所需內文(content)如下
 
@@ -89,6 +89,12 @@ class NotifyController extends Controller
      * 參數:    month            cases
      * 說明: 案例分享當前月份    社群案例標題
      * 類型:   string         array[string]
+
+    invoice:
+     * 範例: {'number':'ZA17444891','time':'2024/03/05'}
+     * 參數:   number          time
+     * 說明:   發票號碼      發票開立時間
+     * 類型:   string         string
 
     resign:
      * 範例: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
@@ -189,6 +195,10 @@ class NotifyController extends Controller
                 'social_media_case' => [
                     'month' => 'required|string|regex:/^\d{2}$/',
                     'cases' => 'required|array'
+                ],
+                'invoice' => [
+                    'number' => 'required|string',
+                    'time' => 'required|string'
                 ],
             ];
 
