@@ -29,7 +29,7 @@ class MailNotify extends Mailable
 
         if ($this->attachment) {
             foreach ($this->attachment as $file)
-                $email->attach(storage_path('app/public/' . $file));
+                $email->attach(storage_path('app/' . $file));
         }
 
         return $email;

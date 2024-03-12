@@ -24,3 +24,5 @@ Route::post('/notify/{notifyService}/{type?}', [NotifyController::class, 'add'])
     ->where('notifyService', 'gmail|line|jandi|slack')
     ->where('type', 'exchange_rate|resign|social_media_case');
 /** END通知中心 */
+
+Route::post('/upload', [NotifyController::class, 'upload']);

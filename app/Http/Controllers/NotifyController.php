@@ -20,23 +20,23 @@ class NotifyController extends Controller
      *     tags={"Notify"},
      *     summary="新增通知訊息",
      *     description="
-     Parameters 參數文件
+    Parameters 參數文件
 
-     service:
+    service:
      * 參數類型: string
      * 參數說明: 通知服務類型
      * 是否必傳: Y
      * 注意事項: {service} 服務類型可選: gmail, line, jandi, slack
 
-     type:
+    type:
      * 參數類型: string
      * 參數說明: 通知情境類型
      * 是否必傳: Y
      * 注意事項: 每個通知服務開放情境如下
-        - gmail: exchange_rate(台灣銀行平均匯率通知), social_media_case(最新社群案例通知), resign(員工離退通知)
-        - line:  尚未開放
-        - jandi: 尚未開放
-        - slack: 尚未開放
+    - gmail: exchange_rate(台灣銀行平均匯率通知), social_media_case(最新社群案例通知), resign(員工離退通知)
+    - line:  尚未開放
+    - jandi: 尚未開放
+    - slack: 尚未開放
 
     recipient_name:
      * 參數類型: string
@@ -74,7 +74,7 @@ class NotifyController extends Controller
      * 參數說明: 附件
      * 是否必填: N
 
----------------------------------------------
+    ---------------------------------------------
 
     每個通知情境所需內文(content)如下
 
@@ -194,15 +194,15 @@ class NotifyController extends Controller
 
             $rules = [
                 'recipient_name' => 'required|string|max:15',
-                'email' => 'sometimes|string|email|max:100',
+                'email' => 'sometimes|string|email|max:100||nullable',
                 'carbon_copy' => 'sometimes|array|nullable',
-                'carbon_copy.*' => 'sometimes|string|email',
+                'carbon_copy.*' => 'sometimes|string|email||nullable',
                 'blind_carbon_copy' => 'sometimes|array|nullable',
-                'blind_carbon_copy.*' => 'sometimes|string|email',
+                'blind_carbon_copy.*' => 'sometimes|string|email|nullable',
                 'subject' => 'required|string|max:50',
                 'content' => 'required|array',
                 'attachment' => 'sometimes|array|nullable',
-                'attachment.*' => 'sometimes|string|regex:/\.[a-zA-Z0-9]+$/',
+                'attachment.*' => 'sometimes|file|mimes:jpeg,jpg,png,xlsx,xml,xsl,pdf|nullable',
             ];
 
             if (isset($template_rules[$template])) {
@@ -237,32 +237,22 @@ class NotifyController extends Controller
         }
     }
 
-//        public function send()
-//    {
-//        try {
-//            $notifies = Notify::whereNull('sent_time')->get();
-//
-//            foreach ($notifies as $notify) {
-//                $carbonCopy = json_decode($notify->carbon_copy, true);
-//                $blindCarbonCopy = json_decode($notify->blind_carbon_copy, true);
-//                $attachment = json_decode($notify->attachment, true);
-//                $content = json_decode($notify->content);
-//
-//                Mail::to($notify->email)
-//                    ->send(new OrderShipped(
-//                        $notify->recipient,
-//                        $carbonCopy,
-//                        $blindCarbonCopy,
-//                        $notify->subject,
-//                        $content,
-//                        $notify->template,
-//                        $attachment
-//                    ));
-//
-//                $notify->update(['sent_time' => now()]);
-//            }
-//        } catch (Exception $e) {
-//            Log::error('Error sending mail for Notify ID ' . $notify->id . ': ' . $e->getMessage());
-//        }
-//    }
+    public function upload(Request $request)
+    {
+        $files = $request->file('file');
+
+        if ($request->hasFile('file')) {
+            $paths = [];
+
+            foreach ($files as $file) {
+                $path = $file->store('uploads');
+                $paths[] = $path;
+            }
+
+            return response()->json(['message' => 'Files uploaded successfully', 'paths' => $paths], 200);
+        }
+
+        return response()->json(['message' => 'No files uploaded'], 400);
+    }
+
 }

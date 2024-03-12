@@ -22,17 +22,28 @@ class NotifyRepository
         try {
             DB::beginTransaction();
 
-            $notify = Notify::create([
+            $notifyData = [
                 'recipient_name' => $data['recipient_name'],
-                'email' => $data['email'] ?? null,
-                'carbon_copy' => json_encode($data['carbon_copy']) ?? null,
-                'blind_carbon_copy' => json_encode($data['blind_carbon_copy']) ?? null,
                 'subject' => $data['subject'],
                 'content' => json_encode($data['content']),
                 'template' => $data['template'],
                 'service' => $data['service'],
-                'attachment' => json_encode($data['attachment']) ?? null,
-            ]);
+            ];
+
+            if (isset($data['email'])) {
+                $notifyData['email'] = $data['email'];
+            }
+            if (isset($data['carbon_copy'])) {
+                $notifyData['carbon_copy'] = json_encode($data['carbon_copy']);
+            }
+            if (isset($data['blind_carbon_copy'])) {
+                $notifyData['blind_carbon_copy'] = json_encode($data['blind_carbon_copy']);
+            }
+            if (isset($data['upload'])) {
+                $notifyData['attachment'] = json_encode($data['upload']);
+            }
+
+            $notify = Notify::create($notifyData);
 
             DB::commit();
             return $notify;
