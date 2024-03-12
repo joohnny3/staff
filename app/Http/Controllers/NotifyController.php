@@ -31,12 +31,16 @@ class NotifyController extends Controller
      type:
      * 參數類型: string
      * 參數說明: 通知情境類型
-     * 是否必傳: N
-     * 注意事項: 目前只開放 gmail {type} 有通知情境可選: 1.exchange_rate(台灣銀行平均匯率通知), 2.social_media_case(最新社群案例通知), 3.resign(員工離退通知)
+     * 是否必傳: Y
+     * 注意事項: 每個通知服務開放情境如下
+        - gmail: exchange_rate(台灣銀行平均匯率通知), social_media_case(最新社群案例通知), resign(員工離退通知)
+        - line:  尚未開放
+        - jandi: 尚未開放
+        - slack: 尚未開放
 
     recipient_name:
      * 參數類型: string
-     * 參數說明: 接收人姓名
+     * 參數說明: 接收者姓名
      * 是否必填: Y
 
     email:
@@ -45,12 +49,12 @@ class NotifyController extends Controller
      * 是否必填: N
 
     carbon_copy:
-     * 參數類型: JsonString: array
+     * 參數類型: array
      * 參數說明: 副本
      * 是否必填: N
 
     blind_carbon_copy:
-     * 參數類型: JsonString: array
+     * 參數類型: array
      * 參數說明: 副本
      * 是否必填: N
 
@@ -60,37 +64,37 @@ class NotifyController extends Controller
      * 是否必填: Y
 
     content:
-     * 參數類型: Json: Object
+     * 參數類型: Json
      * 參數說明: 通知訊息內文
      * 是否必填: Y
      * 注意事項: 每種通知情境所需內文格式不同
 
     attachment:
-     * 參數類型: JsonString: array
+     * 參數類型: array
      * 參數說明: 附件
      * 是否必填: N
 
 ---------------------------------------------
 
-    各情境通知內文(content)所需參數
+    每個通知情境所需內文(content)如下
 
     exchange_rate:
-     * 範例: {'year':2024,'month':2}
+     * 範例: {'year':'2024','month':'02'}
      * 參數:     year       month
      * 說明:   匯率表年份   匯率表月份
-     * 類型:    integer    integer
+     * 類型:    string     string
 
     social_media_case:
-     * 範例: {'month':3,'cases':['案例標題',...]}
+     * 範例: {'month':'3','cases':['案例標題',...]}
      * 參數:    month            cases
      * 說明: 案例分享當前月份    社群案例標題
-     * 類型:   integer           array
+     * 類型:   string         array[string]
 
     resign:
      * 範例: {'resignations':[{'employee_id':'','name':'','name_en':'','department':'','resignation_date':'','last_working_day':'','note':''},...]}
      * 參數:   employee_id     name      name_en     department     resignation_date    last_working_day    note
      * 說明:     員工編號      員工姓名   員工英文名字    員工所屬部門          離職日期            最後工作日        備註
-     * 類型:     string       string     string        string              date               date         string
+     * 類型:     string       string     string        string             string             string        string
     ",
      *     security={
      *         {
@@ -140,7 +144,7 @@ class NotifyController extends Controller
      *      ),
      *     @OA\Response (
      *          response=400,
-     *          ref="#/components/responses/400",
+     *          ref="#/components/responses/401",
      *     ),
      *     @OA\Response (
      *          response=401,
@@ -169,8 +173,8 @@ class NotifyController extends Controller
 
             $template_rules = [
                 'exchange_rate' => [
-                    'year' => 'required|integer',
-                    'month' => 'required|integer',
+                    'year' => 'required|string|regex:/^\d{4}$/',
+                    'month' => 'required|string|regex:/^\d{2}$/',
                 ],
                 'resign' => [
                     'resignations' => 'required|array',
@@ -178,12 +182,12 @@ class NotifyController extends Controller
                     'resignations.*.name' => 'required|string|max:20',
                     'resignations.*.name_en' => 'required|string|max:50|regex:/^[A-Za-z0-9\.]*$/',
                     'resignations.*.department' => 'required|string|max:30',
-                    'resignations.*.resignation_date' => 'required|date',
-                    'resignations.*.last_working_day' => 'required|date',
+                    'resignations.*.resignation_date' => 'required|string',
+                    'resignations.*.last_working_day' => 'required|string',
                     'resignations.*.note' => 'sometimes|string|nullable',
                 ],
                 'social_media_case' => [
-                    'month' => 'required|integer',
+                    'month' => 'required|string|regex:/^\d{2}$/',
                     'cases' => 'required|array'
                 ],
             ];
