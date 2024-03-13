@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('email:send-emails')->cron('*/5 * * * *');
+        $schedule->command('email:send-emails')->cron('* * * * *');
     }
 
 

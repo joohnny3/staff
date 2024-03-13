@@ -204,15 +204,15 @@ class NotifyController extends Controller
 
             $rules = [
                 'recipient_name' => 'required|string|max:15',
-                'email' => 'sometimes|string|email|max:100||nullable',
+                'email' => 'sometimes|string|email|max:100',
                 'carbon_copy' => 'sometimes|array|nullable',
-                'carbon_copy.*' => 'sometimes|string|email||nullable',
+                'carbon_copy.*' => 'sometimes|string|email',
                 'blind_carbon_copy' => 'sometimes|array|nullable',
-                'blind_carbon_copy.*' => 'sometimes|string|email|nullable',
+                'blind_carbon_copy.*' => 'sometimes|string|email',
                 'subject' => 'required|string|max:50',
                 'content' => 'required|array',
                 'attachment' => 'sometimes|array|nullable',
-                'attachment.*' => 'sometimes|file|mimes:jpeg,jpg,png,xlsx,xml,xsl,pdf|nullable',
+                'attachment.*' => 'sometimes|file|mimes:jpeg,jpg,png,xlsx,xml,xsl,pdf',
             ];
 
             if (isset($template_rules[$template])) {
